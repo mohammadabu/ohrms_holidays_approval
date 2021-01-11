@@ -35,15 +35,14 @@
         <field name="arch" type="xml">
             <xpath expr="//group[last()]" position="after">
                 <field name="is_approved_user_id" />
-                <field name="approval_users" />
                 <field name="multi_level_validation" invisible="1"/>
                 <notebook attrs="{'invisible': [('multi_level_validation', '=', False)]}">
                     <page string="Validation Status">
                         <field name="leave_approvals" mode="tree">
                             <tree string="Users" editable="false" create="false" delete="false">
                                 <field name="validators_type" />
-                                <field name="holiday_validators_user" />
-                                <field name="holiday_validators_position" />
+                                <field name="holiday_validators_user" string="User"/>
+                                <field name="holiday_validators_position"  string="Position"/>
                                 <field name="approval"  string="Approval" />
                                 <field name="validation_status"  string="Status" />
                                 <field name="leave_comments"  />
@@ -51,8 +50,8 @@
                             <form>
                                 <group>
                                     <field name="validators_type"/>
-                                    <field name="holiday_validators_user" />
-                                    <field name="holiday_validators_position"/>
+                                    <field name="holiday_validators_user" string="User"/>
+                                    <field name="holiday_validators_position" string="Position"/>
                                     <field name="approval"  string="Approval" />
                                     <field name="validation_status"  string="Status" />
                                     <field name="leave_comments" />
