@@ -66,7 +66,7 @@
                         />
             </xpath>
             <xpath expr="//button[@name='action_approve']" position="attributes">
-                <attribute name="attrs">{'invisible': ['|','&amp;',('approval_users', 'ilike', '#2#'),('multi_level_validation','=',True),('state','!=','confirm')]}</attribute> 
+                <attribute name="attrs">{'invisible': ['|','&amp;',('approval_users', 'ilike', '#2#'),('1','=','1'),('state','!=','confirm')]}</attribute> 
             </xpath>
             <xpath expr="//button[@name='action_refuse']" position="replace">
                 <button string="Refuse" name="action_refuse" states="confirm,validate,validate1" type="object"
