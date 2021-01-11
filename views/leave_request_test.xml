@@ -62,6 +62,7 @@
                 </notebook>
             </xpath>
             <xpath expr="//button[@name='action_approve']" position="replace">
+                <field name="current_user"/>
                 <button string="Approve" name="action_approve"  type="object" class="oe_highlight"
                         />
             </xpath>
