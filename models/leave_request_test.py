@@ -246,7 +246,7 @@ class HrLeave(models.Model):
         current_uid = self.env.uid
         hr_holidays = self.env['hr.leave'].sudo().search([('state','=','confirm'),('holiday_status_id.validation_type','=','multi')])
         li = []
-        approval_users = False
+        approval_users = ""
         for l in hr_holidays:
             for l2 in l.leave_approvals: 
                 # direct manager
