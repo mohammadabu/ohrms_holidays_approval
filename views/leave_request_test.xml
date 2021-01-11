@@ -65,18 +65,10 @@
             <xpath expr="//button[@name='action_approve']" position="replace">
                 <button string="Approve" name="action_approve"  type="object" class="oe_highlight"
                         />
-                <!-- <button name="confirm_request" class="oe_highlight" string="Confirm Request" type="workflow" attrs="{'invisible': [('ami_responsible', '=', False)]}" /> -->
-
             </xpath>
             <xpath expr="//button[@name='action_approve']" position="attributes">
-                <attribute name="attrs">{'invisible': [('is_approved_user_id', '!=', True)]}</attribute> 
+                <attribute name="attrs">{'invisible': ['|','&amp;',('is_approved_user_id', '!=', True),('multi_level_validation','==',True),('state','!=','confirm')]}</attribute> 
             </xpath>
-            <!-- <xpath expr="//button[@name='action_approve']" position="attributes">
-                <attribute name="attrs">{'invisible': ['|','&amp;',('approval_users', 'like', 'current_user'),('multi_level_validation','==',True),('state','!=','confirm')]}</attribute> 
-            </xpath> -->
-            <!-- <xpath expr="//button[@name='action_approve']" position="attributes">
-                <attribute name="attrs">{'invisible': [('ami_responsible', '=', False)]}</attribute> 
-            </xpath> -->
             <xpath expr="//button[@name='action_refuse']" position="replace">
                 <button string="Refuse" name="action_refuse" states="confirm,validate,validate1" type="object"
                         />
