@@ -133,17 +133,20 @@ class HrLeave(models.Model):
                     if l.employee_id.parent_id.user_id.id != False:
                         if l.employee_id.parent_id.user_id.id == current_uid:
                             li.append(l.id)
+                            l.test = True
                 # position
                 if  l2.validators_type == 'position':
                     employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',l2.holiday_validators_position.id),('user_id','=',current_uid)])
                     if len(employee) > 0:
                         li.append(l.id)
+                        l.test = True
                 #user
                 if  l2.validators_type == 'user':
                     if l2.holiday_validators_user.id == current_uid:
-                        li.append(l.id)  
+                        li.append(l.id)
+                        l.test = True  
                 if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
-                    break                             
+                    break                                 
         value = {
             'domain': str([('id', 'in', li)]),
             'view_mode': 'tree,form',
@@ -238,29 +241,29 @@ class HrLeave(models.Model):
         rtn = super(HrLeave,self).create(vals)
         return rtn      
 
-    @api.model
-    def fields_view_get(self, view_id=None, view_type='form', toolbar=False,submenu=False):
-        res = super(HrLeave, self).fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar,submenu=submenu)
-        # raise UserError(self.id)
-        print(view_type)
-        print(view_id)
-        print('123123123123231312313213131231313211')
-        # self.test = True
-        if self.env.context.get('active_id'):
-            active_id = self.env.context.get('active_id')
-        else:
-            active_id = self.id
+    # @api.model
+    # def fields_view_get(self, view_id=None, view_type='form', toolbar=False,submenu=False):
+    #     res = super(HrLeave, self).fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar,submenu=submenu)
+    #     # raise UserError(self.id)
+    #     print(view_type)
+    #     print(view_id)
+    #     print('123123123123231312313213131231313211')
+    #     # self.test = True
+    #     if self.env.context.get('active_id'):
+    #         active_id = self.env.context.get('active_id')
+    #     else:
+    #         active_id = self.id
             
-        leaves = self.env['hr.leave'].search([('id', '=', active_id)], limit=1)
-        # managers_list = self.env.ref('project.group_project_manager')
-        for leave in leaves:
-            leave.test = True
-        #     if (record.user_id.id == self.env.context.get('uid')) or (
-        #             self.env.context.get('uid') in managers_list.users.ids):
-        #         record.project_m_user = True
-        #     else:
-        #         record.project_m_user = False
-        return res
+    #     leaves = self.env['hr.leave'].search([('id', '=', active_id)], limit=1)
+    #     # managers_list = self.env.ref('project.group_project_manager')
+    #     for leave in leaves:
+    #         leave.test = True
+    #     #     if (record.user_id.id == self.env.context.get('uid')) or (
+    #     #             self.env.context.get('uid') in managers_list.users.ids):
+    #     #         record.project_m_user = True
+    #     #     else:
+    #     #         record.project_m_user = False
+    #     return res
 
 
 
