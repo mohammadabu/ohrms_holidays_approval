@@ -242,7 +242,8 @@ class HrLeave(models.Model):
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False,submenu=False):
         res = super(HrLeave, self).fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar,submenu=submenu)
         # raise UserError(self.id)
-        print(self.id)
+        print(view_type)
+        print(view_id)
         print('123123123123231312313213131231313211')
         self.test = True
 
