@@ -126,26 +126,26 @@ class HrLeave(models.Model):
         current_uid = self.env.uid
         hr_holidays = self.env['hr.leave'].sudo().search([('state','=','confirm'),('holiday_status_id.validation_type','=','multi')])
         li = []
+        self.check_actions()
         for l in hr_holidays:
-            # self.test = self.test.replace("#"+str(current_uid)+"#", "")
             for l2 in l.leave_approvals: 
                 # direct manager
                 if l2.validators_type == 'direct_manager' and l.employee_id.parent_id.id != False:
                     if l.employee_id.parent_id.user_id.id != False:
                         if l.employee_id.parent_id.user_id.id == current_uid:
                             li.append(l.id)
-                            self.check_actions(l)
+                            # self.check_actions(l)
                 # position
                 if  l2.validators_type == 'position':
                     employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',l2.holiday_validators_position.id),('user_id','=',current_uid)])
                     if len(employee) > 0:
                         li.append(l.id)
-                        self.check_actions(l)
+                        # self.check_actions(l)
                 #user
                 if  l2.validators_type == 'user':
                     if l2.holiday_validators_user.id == current_uid:
                         li.append(l.id)
-                        self.check_actions(l)
+                        # self.check_actions(l)
                 if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
                     break                                 
         value = {
@@ -242,32 +242,39 @@ class HrLeave(models.Model):
         rtn = super(HrLeave,self).create(vals)
         return rtn      
 
-    def check_actions(self,leave):
+    def check_actions(self):
         current_uid = self.env.uid
-        leave_approvals = leave.leave_approvals
-        # self.test = self.test.replace("#"+str(current_uid)+"#", "")    
-        for leave_approval in leave_approvals:
-            if leave_approval.validation_status != True:
-                if leave_approval.validators_type == 'direct_manager' and leave.employee_id.parent_id.id != False:
-                    if leave.employee_id.parent_id.user_id.id != False:
-                        if leave.employee_id.parent_id.user_id.id == current_uid:
-                            if ("#"+str(current_uid)+"#") not in self.test:
-                                self.test = self.test + ("#"+str(current_uid)+"#")
-                            else:
-                                self.test = ("#"+str(current_uid)+"#")
-                if  leave_approval.validators_type == 'position':
-                    employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',leave_approval.holiday_validators_position.id),('user_id','=',current_uid)])
-                    if len(employee) > 0:
-                        if ("#"+str(current_uid)+"#") not in self.test:
-                            self.test = self.test + ("#"+str(current_uid)+"#")
+        hr_holidays = self.env['hr.leave'].sudo().search([('state','=','confirm'),('holiday_status_id.validation_type','=','multi')])
+        li = []
+        for l in hr_holidays:
+            l.test = False
+            for l2 in l.leave_approvals: 
+                # direct manager
+                if l2.validators_type == 'direct_manager' and l.employee_id.parent_id.id != False:
+                    if l.employee_id.parent_id.user_id.id != False:
+                        if l.test != False:
+                            if ("#"+str(l.employee_id.parent_id.user_id.id)+"#") not in l.test:
+                                l.test = l.test + ("#"+str(l.employee_id.parent_id.user_id.id)+"#")
                         else:
-                            self.test = ("#"+str(current_uid)+"#")      
-                if  leave_approval.validators_type == 'user':
-                    if leave_approval.holiday_validators_user.id == current_uid:
-                        if ("#"+str(current_uid)+"#") not in self.test:
-                            self.test = self.test + ("#"+str(current_uid)+"#")
+                            l.test = ("#"+str(l.employee_id.parent_id.user_id.id)+"#")
+                # position
+                if  l2.validators_type == 'position':
+                    employees = self.env['hr.employee'].sudo().search([('multi_job_id','in',l2.holiday_validators_position.id)])
+                    for employee in employees:
+                        if l.test != False:
+                            if ("#"+str(employee.user_id.id)+"#") not in l.test:
+                                l.test = l.test + ("#"+str(employee.user_id.id)+"#")
                         else:
-                            self.test = ("#"+str(current_uid)+"#")
+                            l.test = ("#"+str(employee.user_id.id)+"#")
+                #user
+                if  l2.validators_type == 'user':
+                    if l.test != False:
+                        if ("#"+str(l2.holiday_validators_user.id)+"#") not in l.test:
+                            l.test = l.test + ("#"+str(l2.holiday_validators_user.id)+"#")
+                    else:
+                        l.test = ("#"+str(l2.holiday_validators_user.id)+"#")
+                if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
+                    break                                 
                                                         
 
 
