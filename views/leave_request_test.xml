@@ -34,6 +34,7 @@
         <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//group[last()]" position="after">
+                <field name="current_user"/>
                 <field name="approval_users" />
                 <field name="multi_level_validation" invisible="1"/>
                 <notebook attrs="{'invisible': [('multi_level_validation', '=', False)]}">
@@ -62,7 +63,6 @@
                 </notebook>
             </xpath>
             <xpath expr="//button[@name='action_approve']" position="replace">
-                <field name="current_user"/>
                 <button string="Approve" name="action_approve"  type="object" class="oe_highlight"
                         />
             </xpath>
