@@ -106,30 +106,15 @@ class HrLeave(models.Model):
                                             help="If checked then multi-level approval is necessary") 
     approval_users = fields.Text()   
 
-    def _check_ami_responsible(self, cr, uid, ids, field_name, arg, context):
-        """ Checks if user is responsible for this request
-        @return: Dictionary of values
-        """
-        res = {}
-        for req in self.browse(cr, uid, ids, context=context):
-            if 2 == uid:
-                res[req.id] = True
-            else:
-                res[req.id] = False
-        return res
+    
+    is_approved_user_id = fields.Boolean(default=False, compute='_get_current_user_details')    
+    def _get_current_user_details(self):
+        for record in self:
+            # current_user = self.env['res.users'].search([('id','=',self.env.user.id)]) 
+            # if current_user.approved_user_id ==True:
+            self.is_approved_user_id= True
 
-    ami_responsible = fields.function(_check_ami_responsible, type="boolean", obj="generic.request", method=True)
 
-#    _columns={
-#         'ami_responsible': fields.function(_check_ami_responsible, type="boolean", obj="generic.request", method=True),
-#     }
-
-    @api.depends()
-    def _get_current_user(self):
-        for rec in self:
-            rec.current_user = self.env.user
-        self.update({'current_user' : self.env.user.id})
-                                    
     @api.onchange('holiday_status_id')
     def add_validators(self):
         """ Update the tree view and add new validators

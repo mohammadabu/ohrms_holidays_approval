@@ -34,6 +34,7 @@
         <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//group[last()]" position="after">
+                <field name="is_approved_user_id" />
                 <field name="approval_users" />
                 <field name="multi_level_validation" invisible="1"/>
                 <notebook attrs="{'invisible': [('multi_level_validation', '=', False)]}">
@@ -67,12 +68,15 @@
                 <!-- <button name="confirm_request" class="oe_highlight" string="Confirm Request" type="workflow" attrs="{'invisible': [('ami_responsible', '=', False)]}" /> -->
 
             </xpath>
+            <xpath expr="//button[@name='action_approve']" position="attributes">
+                <attribute name="attrs">{'invisible': [('is_approved_user_id', '=', True)]}</attribute> 
+            </xpath>
             <!-- <xpath expr="//button[@name='action_approve']" position="attributes">
                 <attribute name="attrs">{'invisible': ['|','&amp;',('approval_users', 'like', 'current_user'),('multi_level_validation','==',True),('state','!=','confirm')]}</attribute> 
             </xpath> -->
-            <xpath expr="//button[@name='action_approve']" position="attributes">
+            <!-- <xpath expr="//button[@name='action_approve']" position="attributes">
                 <attribute name="attrs">{'invisible': [('ami_responsible', '=', False)]}</attribute> 
-            </xpath>
+            </xpath> -->
             <xpath expr="//button[@name='action_refuse']" position="replace">
                 <button string="Refuse" name="action_refuse" states="confirm,validate,validate1" type="object"
                         />
