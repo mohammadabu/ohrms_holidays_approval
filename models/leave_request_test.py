@@ -104,6 +104,7 @@ class HrLeave(models.Model):
     multi_level_validation = fields.Boolean(string='Multiple Level Approval',
                                             related='holiday_status_id.multi_level_validation',
                                             help="If checked then multi-level approval is necessary")
+    test = field.Boolean()                                        
     @api.onchange('holiday_status_id')
     def add_validators(self):
         """ Update the tree view and add new validators
@@ -237,7 +238,19 @@ class HrLeave(models.Model):
         rtn = super(HrLeave,self).create(vals)
         return rtn      
 
-
+    @api.model
+    def fields_view_get(self, view_id=None, view_type='form', toolbar=False,submenu=False):
+        res = super(HrLeave, self).fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar,submenu=submenu)
+        self.test = True
+        # project_login = self.env['project.project'].search([])
+        # managers_list = self.env.ref('project.group_project_manager')
+        # for record in project_login:
+        #     if (record.user_id.id == self.env.context.get('uid')) or (
+        #             self.env.context.get('uid') in managers_list.users.ids):
+        #         record.project_m_user = True
+        #     else:
+        #         record.project_m_user = False
+        return res
 
 
 
