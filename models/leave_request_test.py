@@ -249,6 +249,7 @@ class HrLeave(models.Model):
         for l in hr_holidays:
             approval_users = ""
             for l2 in l.leave_approvals: 
+                #for approval button
                 if l2.validation_status != True:
                     # direct manager
                     if l2.validators_type == 'direct_manager' and l.employee_id.parent_id.id != False:
