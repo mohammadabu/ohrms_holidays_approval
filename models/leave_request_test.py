@@ -245,11 +245,16 @@ class HrLeave(models.Model):
         print(view_type)
         print(view_id)
         print('123123123123231312313213131231313211')
-        self.test = True
-
-        project_login = self.env['hr.leave'].search([('id','=',self.id)])
+        # self.test = True
+        if self.env.context.get('active_id'):
+            active_id = self.env.context.get('active_id')
+        else:
+            active_id = self.id
+            
+        leaves = self.env['hr.leave'].search([('id', '=', active_id)], limit=1)
         # managers_list = self.env.ref('project.group_project_manager')
-        # for record in project_login:
+        for leave in leaves:
+            leave.test = True
         #     if (record.user_id.id == self.env.context.get('uid')) or (
         #             self.env.context.get('uid') in managers_list.users.ids):
         #         record.project_m_user = True
