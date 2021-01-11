@@ -69,7 +69,7 @@
 
             </xpath>
             <xpath expr="//button[@name='action_approve']" position="attributes">
-                <attribute name="attrs">{'invisible': [('is_approved_user_id', '=', True)]}</attribute> 
+                <attribute name="attrs">{'invisible': [('is_approved_user_id', '!=', True)]}</attribute> 
             </xpath>
             <!-- <xpath expr="//button[@name='action_approve']" position="attributes">
                 <attribute name="attrs">{'invisible': ['|','&amp;',('approval_users', 'like', 'current_user'),('multi_level_validation','==',True),('state','!=','confirm')]}</attribute> 
