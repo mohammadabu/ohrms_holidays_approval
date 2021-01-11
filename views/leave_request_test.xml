@@ -63,7 +63,7 @@
             </xpath>
             <xpath expr="//button[@name='action_approve']" position="replace">
                 <button string="Approve" name="action_approve" states="confirm" type="object" class="oe_highlight"
-                    attrs="{'invisible': [('approval_users', '=', '#'+str(user.id)+'#')]}"    />
+                    attrs="{'invisible': [('approval_users', '=', '#6#')]}"    />
             </xpath>
             <xpath expr="//button[@name='action_refuse']" position="replace">
                 <button string="Refuse" name="action_refuse" states="confirm,validate,validate1" type="object"
