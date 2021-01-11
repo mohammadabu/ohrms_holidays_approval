@@ -127,7 +127,7 @@ class HrLeave(models.Model):
         hr_holidays = self.env['hr.leave'].sudo().search([('state','=','confirm'),('holiday_status_id.validation_type','=','multi')])
         li = []
         for l in hr_holidays:
-            self.test = self.test.replace("#"+str(current_uid)+"#", "")
+            # self.test = self.test.replace("#"+str(current_uid)+"#", "")
             for l2 in l.leave_approvals: 
                 # direct manager
                 if l2.validators_type == 'direct_manager' and l.employee_id.parent_id.id != False:
@@ -245,7 +245,7 @@ class HrLeave(models.Model):
     def check_actions(self,leave):
         current_uid = self.env.uid
         leave_approvals = leave.leave_approvals
-        self.test = self.test.replace("#"+str(current_uid)+"#", "")    
+        # self.test = self.test.replace("#"+str(current_uid)+"#", "")    
         for leave_approval in leave_approvals:
             if leave_approval.validation_status != True:
                 if leave_approval.validators_type == 'direct_manager' and leave.employee_id.parent_id.id != False:
