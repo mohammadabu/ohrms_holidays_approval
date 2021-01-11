@@ -104,7 +104,8 @@ class HrLeave(models.Model):
     multi_level_validation = fields.Boolean(string='Multiple Level Approval',
                                             related='holiday_status_id.multi_level_validation',
                                             help="If checked then multi-level approval is necessary")
-    test = fields.Many2many('res.users','leave_approvals')                                        
+    # test = fields.Many2many('res.users','leave_approvals') 
+    test = fields.Boolean()                                       
     @api.onchange('holiday_status_id')
     def add_validators(self):
         """ Update the tree view and add new validators
