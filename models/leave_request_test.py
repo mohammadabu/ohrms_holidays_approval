@@ -241,10 +241,10 @@ class HrLeave(models.Model):
     @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False,submenu=False):
         res = super(HrLeave, self).fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar,submenu=submenu)
-        raise UserError('1111')
+        raise UserError(self.id)
         self.test = True
 
-        # project_login = self.env['project.project'].search([])
+        # project_login = self.env['hr.leave'].search([])
         # managers_list = self.env.ref('project.group_project_manager')
         # for record in project_login:
         #     if (record.user_id.id == self.env.context.get('uid')) or (
