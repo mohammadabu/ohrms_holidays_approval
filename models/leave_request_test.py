@@ -134,18 +134,18 @@ class HrLeave(models.Model):
                     if l.employee_id.parent_id.user_id.id != False:
                         if l.employee_id.parent_id.user_id.id == current_uid:
                             li.append(l.id)
-                            self.check_actions(l)
+                            # self.check_actions(l)
                 # position
                 if  l2.validators_type == 'position':
                     employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',l2.holiday_validators_position.id),('user_id','=',current_uid)])
                     if len(employee) > 0:
                         li.append(l.id)
-                        self.check_actions(l)
+                        # self.check_actions(l)
                 #user
                 if  l2.validators_type == 'user':
                     if l2.holiday_validators_user.id == current_uid:
                         li.append(l.id)
-                        self.check_actions(l)
+                        # self.check_actions(l)
                 if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
                     break                                 
         value = {
@@ -251,7 +251,7 @@ class HrLeave(models.Model):
                 if leave_approval.validators_type == 'direct_manager' and leave.employee_id.parent_id.id != False:
                     if leave.employee_id.parent_id.user_id.id != False:
                         if leave.employee_id.parent_id.user_id.id == current_uid:
-                            # leave.test = True
+                            leave.test = True
                 if  leave_approval.validators_type == 'position':
                     employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',leave_approval.holiday_validators_position.id),('user_id','=',current_uid)])
                     if len(employee) > 0:
