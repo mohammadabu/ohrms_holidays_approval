@@ -242,23 +242,23 @@ class HrLeave(models.Model):
         rtn = super(HrLeave,self).create(vals)
         return rtn      
 
-    def check_actions(self,leave):
-        current_uid = self.env.uid
-        leave_approvals = leave.leave_approvals
-        # leave.test = False
-        for leave_approval in leave_approvals:
-            if leave_approval.validation_status != True:
-                if leave_approval.validators_type == 'direct_manager' and leave.employee_id.parent_id.id != False:
-                    if leave.employee_id.parent_id.user_id.id != False:
-                        if leave.employee_id.parent_id.user_id.id == current_uid:
-                            leave.test = True
-                if  leave_approval.validators_type == 'position':
-                    employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',leave_approval.holiday_validators_position.id),('user_id','=',current_uid)])
-                    if len(employee) > 0:
-                        leave.test = True      
-                if  leave_approval.validators_type == 'user':
-                    if leave_approval.holiday_validators_user.id == current_uid:
-                        # leave.test = True
+    # def check_actions(self,leave):
+    #     current_uid = self.env.uid
+    #     leave_approvals = leave.leave_approvals
+    #     leave.test = False
+    #     for leave_approval in leave_approvals:
+    #         if leave_approval.validation_status != True:
+    #             if leave_approval.validators_type == 'direct_manager' and leave.employee_id.parent_id.id != False:
+    #                 if leave.employee_id.parent_id.user_id.id != False:
+    #                     if leave.employee_id.parent_id.user_id.id == current_uid:
+    #                         leave.test = True
+    #             if  leave_approval.validators_type == 'position':
+    #                 employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',leave_approval.holiday_validators_position.id),('user_id','=',current_uid)])
+    #                 if len(employee) > 0:
+    #                     leave.test = True      
+    #             if  leave_approval.validators_type == 'user':
+    #                 if leave_approval.holiday_validators_user.id == current_uid:
+    #                     leave.test = True
                                                         
 
 
