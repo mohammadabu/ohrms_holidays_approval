@@ -274,7 +274,7 @@ class HrLeave(models.Model):
                     else:
                         approval_users = ("#"+str(l2.holiday_validators_user.id)+"#")
                 if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
-                    l.test = approval_users
+                    # l.test = approval_users
                     break                                 
                                                         
 
