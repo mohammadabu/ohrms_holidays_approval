@@ -234,17 +234,20 @@ class HrLeave(models.Model):
                             validation_obj = user.leave_approvals.search(
                                     [('id', '=', user_obj.id)])
                             validation_obj.validation_status = True
+                            validation_obj.validation_refused = False
                 if  user_obj.validators_type == 'position':
                     employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',user_obj.holiday_validators_position.id),('user_id','=',current_uid)])
                     if len(employee) > 0:
                         validation_obj = user.leave_approvals.search(
                                     [('id', '=', user_obj.id)])
                         validation_obj.validation_status = True
+                        validation_obj.validation_refused = False
                 if  user_obj.validators_type == 'user':
                     if user_obj.holiday_validators_user.id == current_uid:
                         validation_obj = user.leave_approvals.search(
                                     [('id', '=', user_obj.id)])
                         validation_obj.validation_status = True
+                        validation_obj.validation_refused = False
                 if not(user_obj.approval != True or (user_obj.approval == True and user_obj.validation_status == True)): 
                     break 
         approval_flag = True
