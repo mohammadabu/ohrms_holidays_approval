@@ -247,7 +247,7 @@ class HrLeave(models.Model):
         print('123123123123231312313213131231313211')
         self.test = True
 
-        # project_login = self.env['hr.leave'].search([])
+        project_login = self.env['hr.leave'].search([('id','=',self.id)])
         # managers_list = self.env.ref('project.group_project_manager')
         # for record in project_login:
         #     if (record.user_id.id == self.env.context.get('uid')) or (
