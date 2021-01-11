@@ -82,9 +82,12 @@ class LeaveValidationStatus(models.Model):
                                          domain="[('share','=',False)]")
     holiday_validators_position = fields.Many2one('hr.job')                                     
     approval = fields.Boolean()   
-    validation_status = fields.Boolean(string='Approve Status', readonly=True,
+    validation_status = fields.Boolean(string='Approved', readonly=True,
                                        default=False,
-                                       track_visibility='always', help="Status")
+                                       track_visibility='always', help="Approved")
+    validation_refused = fields.Boolean(string='Refused', readonly=True,
+                                       default=False,
+                                       track_visibility='always', help="Refused")                                   
     leave_comments = fields.Text(string='Comments', help="Comments")
 
     @api.onchange('validators_type','holiday_validators_user','holiday_validators_position','approval')
@@ -105,8 +108,8 @@ class HrLeave(models.Model):
                                             related='holiday_status_id.multi_level_validation',
                                             help="If checked then multi-level approval is necessary") 
     
-    is_approved_user_id = fields.Boolean(default=False, compute='_get_current_user_details')    
-    def _get_current_user_details(self):
+    is_approved_user_id = fields.Boolean(default=False, compute='_check_is_approved_user_id')    
+    def _check_is_approved_user_id(self):
         current_uid = self.env.uid
         self.is_approved_user_id= False
         for l2 in self.leave_approvals: 
@@ -133,6 +136,11 @@ class HrLeave(models.Model):
                         break
                 if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
                     break        
+    is_refused_user_id = fields.Boolean(default=False, compute='_check_is_refused_user_id')
+    def _check_is_approved_user_id(self):
+        current_uid = self.env.uid
+        self.is_refused_user_id= False
+
     @api.onchange('holiday_status_id')
     def add_validators(self):
         """ Update the tree view and add new validators

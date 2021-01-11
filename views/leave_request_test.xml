@@ -43,8 +43,9 @@
                                 <field name="validators_type" />
                                 <field name="holiday_validators_user" string="User"/>
                                 <field name="holiday_validators_position"  string="Position"/>
-                                <field name="approval"  string="Approval" />
-                                <field name="validation_status"  string="Status" />
+                                <field name="approval"  string="First approval" />
+                                <field name="validation_status"  string="Approved" />
+                                <field name="validation_refused"  string="Refused" />
                                 <field name="leave_comments"  />
                             </tree>
                             <form>
@@ -52,8 +53,9 @@
                                     <field name="validators_type"/>
                                     <field name="holiday_validators_user" string="User"/>
                                     <field name="holiday_validators_position" string="Position"/>
-                                    <field name="approval"  string="Approval" />
-                                    <field name="validation_status"  string="Status" />
+                                    <field name="approval" string="First approval" />
+                                    <field name="validation_status"  string="Approved" />
+                                    <field name="validation_refused"  string="Refused" />
                                     <field name="leave_comments" />
                                 </group>
                             </form>
