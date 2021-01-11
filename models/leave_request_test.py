@@ -105,7 +105,24 @@ class HrLeave(models.Model):
                                             related='holiday_status_id.multi_level_validation',
                                             help="If checked then multi-level approval is necessary") 
     approval_users = fields.Text()   
-    current_user = fields.Many2one('res.users', compute='_get_current_user')
+
+    def _check_ami_responsible(self, cr, uid, ids, field_name, arg, context):
+        """ Checks if user is responsible for this request
+        @return: Dictionary of values
+        """
+        res = {}
+        for req in self.browse(cr, uid, ids, context=context):
+            if 2 == uid:
+                res[req.id] = True
+            else:
+                res[req.id] = False
+        return res
+
+    ami_responsible = fields.function(_check_ami_responsible, type="boolean", obj="generic.request", method=True)
+
+#    _columns={
+#         'ami_responsible': fields.function(_check_ami_responsible, type="boolean", obj="generic.request", method=True),
+#     }
 
     @api.depends()
     def _get_current_user(self):
