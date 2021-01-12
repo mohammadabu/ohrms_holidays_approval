@@ -335,25 +335,25 @@ class HrLeave(models.Model):
                     holiday.linked_request_ids.action_refuse()
                 self._remove_resource_leave()
                 self.activity_update()
-                for user_obj in user.leave_approvals:
+                for user_obj in self.leave_approvals:
                     if user_obj.validation_status != True:
-                        if user_obj.validators_type == 'direct_manager' and user.employee_id.parent_id.id != False:
-                            if user.employee_id.parent_id.user_id.id != False:
-                                if user.employee_id.parent_id.user_id.id == current_uid:
-                                    validation_obj = user.leave_approvals.search(
+                        if user_obj.validators_type == 'direct_manager' and self.employee_id.parent_id.id != False:
+                            if self.employee_id.parent_id.user_id.id != False:
+                                if self.employee_id.parent_id.user_id.id == current_uid:
+                                    validation_obj = self.leave_approvals.search(
                                             [('id', '=', user_obj.id)])
                                     validation_obj.validation_status = False
                                     validation_obj.validation_refused = True
                         if  user_obj.validators_type == 'position':
                             employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',user_obj.holiday_validators_position.id),('user_id','=',current_uid)])
                             if len(employee) > 0:
-                                validation_obj = user.leave_approvals.search(
+                                validation_obj = self.leave_approvals.search(
                                             [('id', '=', user_obj.id)])
                                 validation_obj.validation_status = False
                                 validation_obj.validation_refused = True
                         if  user_obj.validators_type == 'user':
                             if user_obj.holiday_validators_user.id == current_uid:
-                                validation_obj = user.leave_approvals.search(
+                                validation_obj = self.leave_approvals.search(
                                             [('id', '=', user_obj.id)])
                                 validation_obj.validation_status = False
                                 validation_obj.validation_refused = True
