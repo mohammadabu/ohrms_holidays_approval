@@ -7,7 +7,7 @@
             <form string="Comment">
                 <group class="oe_title">
                     <field name="comment"/>
-                </groub>
+                </group>
                 <footer>
                     <button name="create_comment" string="Submit" type="object" class="btn-primary"/>
                     <button name="cancel_comment" string="Cancel" type="object" class="btn-secondary"/>
