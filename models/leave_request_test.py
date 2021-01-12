@@ -238,6 +238,22 @@ class HrLeave(models.Model):
     def approval_check(self):
         """ Check all leave validators approved the leave request if approved
          change the current request stage to Approved"""
+        view_id=self.env['create.leave.comment']    
+        return {
+                'type': 'ir.actions.act_window',
+                'name': 'Warning : Customer is about or exceeded their credit limit',
+                'res_model': 'create.leave.comment',
+                'view_type': 'form',
+                'view_mode': 'form',
+                # 'res_id'    : new.id,
+                'view_id': self.env.ref('ohrms_holidays_approval.view_create_leave_comment',False).id,
+                'target': 'new',
+        }
+        
+    def create_comment(self):
+        new = view_id.create({
+            'comment' :self.comment
+        })
         current_uid = self.env.uid
         current_employee = self.env['hr.employee'].search(
             [('user_id', '=', self.env.uid)], limit=1)
@@ -248,20 +264,6 @@ class HrLeave(models.Model):
             active_id = self.id
             
         user = self.env['hr.leave'].search([('id', '=', active_id)], limit=1)
-        view_id=self.env['create.leave.comment']
-        new = view_id.create({
-            'comment' :'wwwwwwwwwww'
-        })    
-        return {
-                'type': 'ir.actions.act_window',
-                'name': 'Warning : Customer is about or exceeded their credit limit',
-                'res_model': 'create.leave.comment',
-                'view_type': 'form',
-                'view_mode': 'form',
-                'res_id'    : new.id,
-                'view_id': self.env.ref('ohrms_holidays_approval.view_create_leave_comment',False).id,
-                'target': 'new',
-        }
         comment =  self.env['create.leave.comment'].search([('id', '=', new.id)], limit=1).comment 
         for user_obj in user.leave_approvals:
             if user_obj.validation_status != True:
