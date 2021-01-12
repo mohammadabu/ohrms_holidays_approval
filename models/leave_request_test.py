@@ -240,7 +240,7 @@ class HrLeave(models.Model):
          change the current request stage to Approved"""   
         return {
                 'type': 'ir.actions.act_window',
-                'name': 'Warning : Customer is about or exceeded their credit limit',
+                'name': 'Reason for Approval',
                 'res_model': 'create.leave.comment',
                 'view_type': 'form',
                 'view_mode': 'form',
@@ -253,7 +253,7 @@ class HrLeave(models.Model):
         if self.multi_level_validation: 
             return {
                     'type': 'ir.actions.act_window',
-                    'name': 'Warning : Customer is about or exceeded their credit limit',
+                    'name': 'Reason for Refused',
                     'res_model': 'create.refuse.comment',
                     'view_type': 'form',
                     'view_mode': 'form',
