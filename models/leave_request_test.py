@@ -317,6 +317,7 @@ class HrLeave(models.Model):
                 if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
                     break     
             if approval_access:
+                raise UserError('123')
                 for holiday in self:
                     if holiday.state not in ['confirm', 'validate', 'validate1']:
                         raise UserError(_(
