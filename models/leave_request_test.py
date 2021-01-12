@@ -291,57 +291,83 @@ class HrLeave(models.Model):
     def action_refuse(self):
         """ Refuse the leave request if the current user is in
         validators list """
-        current_employee = self.env['hr.employee'].search(
-            [('user_id', '=', self.env.uid)], limit=1)
+        if self.multi_level_validation:
+            current_employee = self.env['hr.employee'].search(
+                [('user_id', '=', self.env.uid)], limit=1)
 
-        approval_access = False
-        for user in self.leave_approvals:
-            if user.validating_users.id == self.env.uid:
-                approval_access = True
-        if approval_access:
-            for holiday in self:
-                if holiday.state not in ['confirm', 'validate', 'validate1']:
-                    raise UserError(_(
-                        'Leave request must be confirmed or validated in order to refuse it.'))
+            approval_access = False
+            current_uid = self.env.uid
+            self.is_refused_user_id = False
+            for l2 in self.leave_approvals: 
+                # direct manager
+                if l2.validators_type == 'direct_manager' and self.employee_id.parent_id.id != False:
+                    if self.employee_id.parent_id.user_id.id != False:
+                        if self.employee_id.parent_id.user_id.id == current_uid:
+                            approval_access= True
+                # position
+                if  l2.validators_type == 'position':
+                    employees = self.env['hr.employee'].sudo().search([('multi_job_id','in',l2.holiday_validators_position.id)])
+                    if len(employees) > 0:
+                        for employee in employees:
+                            if employee.user_id.id == current_uid:
+                                approval_access= True
+                #user
+                if  l2.validators_type == 'user':
+                    if l2.holiday_validators_user.id == current_uid:
+                        approval_access= True
+                if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
+                    break     
 
-                if holiday.state == 'validate1':
-                    holiday.sudo().write({'state': 'refuse',
-                                          'first_approver_id': current_employee.id})
-                else:
-                    holiday.sudo().write({'state': 'refuse',
-                                          'second_approver_id': current_employee.id})
-                # Delete the meeting
-                if holiday.meeting_id:
-                    holiday.meeting_id.unlink()
-                # If a category that created several holidays, cancel all related
-                holiday.linked_request_ids.action_refuse()
-            self._remove_resource_leave()
-            self.activity_update()
-            validation_obj = self.leave_approvals.search(
-                [('holiday_status', '=', self.id),
-                 ('validating_users', '=', self.env.uid)])
-            validation_obj.validation_status = False
-            return True
+
+
+            if approval_access:
+                for holiday in self:
+                    if holiday.state not in ['confirm', 'validate', 'validate1']:
+                        raise UserError(_(
+                            'Leave request must be confirmed or validated in order to refuse it.'))
+
+                    if holiday.state == 'validate1':
+                        holiday.sudo().write({'state': 'refuse',
+                                            'first_approver_id': current_employee.id})
+                    else:
+                        holiday.sudo().write({'state': 'refuse',
+                                            'second_approver_id': current_employee.id})
+                    # Delete the meeting
+                    if holiday.meeting_id:
+                        holiday.meeting_id.unlink()
+                    # If a category that created several holidays, cancel all related
+                    holiday.linked_request_ids.action_refuse()
+                self._remove_resource_leave()
+                self.activity_update()
+                validation_obj = self.leave_approvals.search(
+                    [('holiday_status', '=', self.id),
+                    ('validating_users', '=', self.env.uid)])
+                validation_obj.validation_status = False
+                validation_obj.validation_refused = True
+                return True
+            else:
+                for holiday in self:
+                    if holiday.state not in ['confirm', 'validate', 'validate1']:
+                        raise UserError(_(
+                            'Leave request must be confirmed or validated in order to refuse it.'))
+
+                    if holiday.state == 'validate1':
+                        holiday.write({'state': 'refuse',
+                                    'first_approver_id': current_employee.id})
+                    else:
+                        holiday.write({'state': 'refuse',
+                                    'second_approver_id': current_employee.id})
+                    # Delete the meeting
+                    if holiday.meeting_id:
+                        holiday.meeting_id.unlink()
+                    # If a category that created several holidays, cancel all related
+                    holiday.linked_request_ids.action_refuse()
+                self._remove_resource_leave()
+                self.activity_update()
+                return True
         else:
-            for holiday in self:
-                if holiday.state not in ['confirm', 'validate', 'validate1']:
-                    raise UserError(_(
-                        'Leave request must be confirmed or validated in order to refuse it.'))
-
-                if holiday.state == 'validate1':
-                    holiday.write({'state': 'refuse',
-                                   'first_approver_id': current_employee.id})
-                else:
-                    holiday.write({'state': 'refuse',
-                                   'second_approver_id': current_employee.id})
-                # Delete the meeting
-                if holiday.meeting_id:
-                    holiday.meeting_id.unlink()
-                # If a category that created several holidays, cancel all related
-                holiday.linked_request_ids.action_refuse()
-            self._remove_resource_leave()
-            self.activity_update()
-            return True
+            rtn = super(HrLeave,self).action_refuse()
+            return rtn        
     @api.model_create_multi
     def create(self,vals):
         for values in vals:
