@@ -63,3 +63,6 @@ class CreateLeaveComment(models.TransientModel):
             return True
         else:
             return False
+
+    def cancel_comment(self):
+        return {'type': 'ir.actions.act_window_close'}        
