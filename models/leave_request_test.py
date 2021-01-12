@@ -158,11 +158,11 @@ class HrLeave(models.Model):
                     break
             #user
             if  l2.validators_type == 'user':
-                # if l2.holiday_validators_user.id == current_uid:
-                self.is_refused_user_id= True
-                break
-            if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
-                break        
+                if l2.holiday_validators_user.id == current_uid:
+                    self.is_refused_user_id= True
+                    break
+            # if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
+            #     break        
     @api.onchange('holiday_status_id')
     def add_validators(self):
         """ Update the tree view and add new validators
