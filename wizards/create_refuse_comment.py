@@ -64,7 +64,7 @@ class CreateLeaveComment(models.TransientModel):
             for user_obj in leave_self.leave_approvals:
                 if user_obj.validators_type == 'direct_manager' and leave_self.employee_id.parent_id.id != False:
                     if leave_self.employee_id.parent_id.user_id.id != False:
-                        if self.employee_id.parent_id.user_id.id == current_uid:
+                        if leave_self.employee_id.parent_id.user_id.id == current_uid:
                             validation_obj = leave_self.leave_approvals.search(
                                     [('id', '=', user_obj.id)])
                             validation_obj.validation_status = False
