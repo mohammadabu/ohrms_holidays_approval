@@ -88,7 +88,7 @@ class LeaveValidationStatus(models.Model):
     validation_refused = fields.Boolean(string='Refused', readonly=True,
                                        default=False,
                                        track_visibility='always', help="Refused")                                   
-    leave_comments = fields.Text(string='Comments', help="Comments")
+    leave_comments = fields.Text(string='Comments', help="Comments",readonly=True)
 
     @api.onchange('validators_type','holiday_validators_user','holiday_validators_position','approval')
     def prevent_change(self):
@@ -245,7 +245,6 @@ class HrLeave(models.Model):
                 'res_model': 'create.leave.comment',
                 'view_type': 'form',
                 'view_mode': 'form',
-                # 'res_id'    : new.id,
                 'view_id': self.env.ref('ohrms_holidays_approval.view_create_leave_comment',False).id,
                 'target': 'new',
         }
