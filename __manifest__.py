@@ -11,6 +11,7 @@
     'website': "https://www.openhrms.com",
     'depends': ['base_setup', 'hr_holidays'],
     'data': [
+        'wizards/create_leave_comment.xml',
         'views/leave_request_test.xml',
         'data/mail_template.xml',
         # 'views/leave_request.xml',
