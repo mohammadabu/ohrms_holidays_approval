@@ -379,6 +379,14 @@ class HrLeave(models.Model):
         else:
             rtn = super(HrLeave,self).action_refuse()
             return rtn        
+    def action_draft(self):
+        """ Reset all validation status to false when leave request
+        set to draft stage"""
+        if self.multi_level_validation:
+            for user in self.leave_approvals:
+                user.validation_status = False
+                user.validation_refused = False
+        return super(HrLeave, self).action_draft()
     @api.model_create_multi
     def create(self,vals):
         for values in vals:
