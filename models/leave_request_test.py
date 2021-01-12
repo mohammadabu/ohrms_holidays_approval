@@ -223,7 +223,9 @@ class HrLeave(models.Model):
         # if validation_type != 'both': this method calls action_validate() below
         if self.multi_level_validation:
             view_id=self.env['create.leave.comment']
-            new = view_id.create()    
+            new = view_id.create({
+                comment = 'text'
+            })    
             return {
                     'type': 'ir.actions.act_window',
                     'name': 'Warning : Customer is about or exceeded their credit limit',
