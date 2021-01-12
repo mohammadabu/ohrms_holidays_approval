@@ -249,19 +249,19 @@ class HrLeave(models.Model):
             
         user = self.env['hr.leave'].search([('id', '=', active_id)], limit=1)
         view_id=self.env['create.leave.comment']
-            new = view_id.create({
-                'comment' :'wwwwwwwwwww'
-            })    
-            return {
-                    'type': 'ir.actions.act_window',
-                    'name': 'Warning : Customer is about or exceeded their credit limit',
-                    'res_model': 'create.leave.comment',
-                    'view_type': 'form',
-                    'view_mode': 'form',
-                    'res_id'    : new.id,
-                    'view_id': self.env.ref('ohrms_holidays_approval.view_create_leave_comment',False).id,
-                    'target': 'new',
-            }
+        new = view_id.create({
+            'comment' :'wwwwwwwwwww'
+        })    
+        return {
+                'type': 'ir.actions.act_window',
+                'name': 'Warning : Customer is about or exceeded their credit limit',
+                'res_model': 'create.leave.comment',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_id'    : new.id,
+                'view_id': self.env.ref('ohrms_holidays_approval.view_create_leave_comment',False).id,
+                'target': 'new',
+        }
         comment =  self.env['create.leave.comment'].search([('id', '=', new.id)], limit=1).comment 
         for user_obj in user.leave_approvals:
             if user_obj.validation_status != True:
