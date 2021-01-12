@@ -387,16 +387,16 @@ class HrLeave(models.Model):
                 user.validation_status = False
                 user.validation_refused = False
         return super(HrLeave, self).action_draft()
-    @api.model_create_multi
-    def create(self,vals):
-        for values in vals:
-            holiday_status_id = values.get('holiday_status_id')
-        hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
-        if hr_holidays.validation_type == "multi":
-            template_id = self.env.ref('ohrms_holidays_approval.custom_update_leave_approval_tempalte').id
-            self.env['mail.template'].sudo().browse(template_id).send_mail(self.id,force_send=True)       
-        rtn = super(HrLeave,self).create(vals)
-        return rtn                            
+    # @api.model_create_multi
+    # def create(self,vals):
+    #     for values in vals:
+    #         holiday_status_id = values.get('holiday_status_id')
+    #     hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
+    #     if hr_holidays.validation_type == "multi":
+    #         template_id = self.env.ref('ohrms_holidays_approval.custom_update_leave_approval_tempalte').id
+    #         self.env['mail.template'].sudo().browse(template_id).send_mail(self.id,force_send=True)       
+    #     rtn = super(HrLeave,self).create(vals)
+    #     return rtn                            
                                                         
 
 
