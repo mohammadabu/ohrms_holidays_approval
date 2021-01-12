@@ -277,9 +277,10 @@ class HrLeave(models.Model):
             holiday_status_id = values.get('holiday_status_id')
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
         if hr_holidays.validation_type == "multi":
+            body_html = "<h1>Hello world</h1>"
             value = {
                 'subject': 'Foo',
-                'body_html': "body_html",
+                'body_html': body_html,
                 'email_to': 'foo@example.com,bar@example.com',
                 'email_cc': 'qux@example.com',
                 'auto_delete': False,
