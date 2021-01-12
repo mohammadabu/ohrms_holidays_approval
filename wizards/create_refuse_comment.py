@@ -15,13 +15,20 @@ class CreateLeaveComment(models.TransientModel):
                 [('user_id', '=', self.env.uid)], limit=1)
         approval_access = False
         current_uid = self.env.uid
-        self.is_refused_user_id = False
+        if self.env.context.get('active_id'):
+            active_id = self.env.context.get('active_id')
+        else:
+            active_id = self.id
+            
+        leave_self = self.env['hr.leave'].search([('id', '=', active_id)], limit=1)
+
+        leave_self.is_refused_user_id = False
         comment =  self.env['create.refuse.comment'].sudo().search([('id', '=', new.id)], limit=1).comment
-        for l2 in self.leave_approvals: 
+        for l2 in leave_self.leave_approvals: 
             # direct manager
-            if l2.validators_type == 'direct_manager' and self.employee_id.parent_id.id != False:
-                if self.employee_id.parent_id.user_id.id != False:
-                    if self.employee_id.parent_id.user_id.id == current_uid:
+            if l2.validators_type == 'direct_manager' and leave_self.employee_id.parent_id.id != False:
+                if leave_self.employee_id.parent_id.user_id.id != False:
+                    if leave_self.employee_id.parent_id.user_id.id == current_uid:
                         approval_access= True
             # position
             if  l2.validators_type == 'position':
@@ -37,7 +44,7 @@ class CreateLeaveComment(models.TransientModel):
             if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
                 break     
         if approval_access:
-            for holiday in self:
+            for holiday in leave_self:
                 if holiday.state not in ['confirm', 'validate', 'validate1']:
                     raise UserError(_(
                         'Leave request must be confirmed or validated in order to refuse it.'))
@@ -52,13 +59,13 @@ class CreateLeaveComment(models.TransientModel):
                     holiday.meeting_id.unlink()
                 # If a category that created several holidays, cancel all related
                 holiday.linked_request_ids.action_refuse()
-            self._remove_resource_leave()
-            self.activity_update()
-            for user_obj in self.leave_approvals:
-                if user_obj.validators_type == 'direct_manager' and self.employee_id.parent_id.id != False:
-                    if self.employee_id.parent_id.user_id.id != False:
+            leave_self._remove_resource_leave()
+            leave_self.activity_update()
+            for user_obj in leave_self.leave_approvals:
+                if user_obj.validators_type == 'direct_manager' and leave_self.employee_id.parent_id.id != False:
+                    if leave_self.employee_id.parent_id.user_id.id != False:
                         if self.employee_id.parent_id.user_id.id == current_uid:
-                            validation_obj = self.leave_approvals.search(
+                            validation_obj = leave_self.leave_approvals.search(
                                     [('id', '=', user_obj.id)])
                             validation_obj.validation_status = False
                             validation_obj.validation_refused = True
@@ -80,7 +87,7 @@ class CreateLeaveComment(models.TransientModel):
                         validation_obj.leave_comments = comment
             return True
         else:
-            for holiday in self:
+            for holiday in leave_self:
                 if holiday.state not in ['confirm', 'validate', 'validate1']:
                     raise UserError(_(
                         'Leave request must be confirmed or validated in order to refuse it.'))
@@ -96,8 +103,8 @@ class CreateLeaveComment(models.TransientModel):
                     holiday.meeting_id.unlink()
                 # If a category that created several holidays, cancel all related
                 holiday.linked_request_ids.action_refuse()
-            self._remove_resource_leave()
-            self.activity_update()
+            leave_self._remove_resource_leave()
+            leave_self.activity_update()
             return True
     def cancel_refuse_comment(self):
         return {'type': 'ir.actions.act_window_close'}        
