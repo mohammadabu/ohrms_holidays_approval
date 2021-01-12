@@ -277,7 +277,7 @@ class HrLeave(models.Model):
             holiday_status_id = values.get('holiday_status_id')
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
         if hr_holidays.validation_type == "multi":
-            body_html = "<h1>Hello world</h1>"
+            body_html = self.create_header_for_email()
             value = {
                 'subject': 'Foo',
                 'body_html': body_html,
@@ -290,11 +290,40 @@ class HrLeave(models.Model):
             mail_id.sudo().send()
       
         rtn = super(HrLeave,self).create(vals)
-        return rtn                            
-                                                    
+        return rtn          
 
 
-
+    def create_header_for_email(self):
+        
+        header = ''
+        header += '<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">'                      
+        header +=   '<tr>'
+        header +=       '<td align="center">' 
+        header +=           '<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">'
+        header +=               '<tbody>'
+        header +=                   '<tr>'
+        header +=                       '<td align="center" style="min-width: 590px;">'
+        header +=                           '<table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">'
+        header +=                               '<tr><td valign="middle">'
+        header +=                                   '<span style="font-size: 10px;">Your Lead/Opportunity</span><br/>'
+        header +=                                   '<span style="font-size: 20px; font-weight: bold;">'
+        header +=                                       'object.name'
+        header +=                                   '</span>'
+        header +=                               '</td><td valign="middle" align="right">'
+        header +=                                   '<img src="/logo.png?company= style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt=""/>'
+        header +=                               '</td></tr>'
+        header +=                               '<tr><td colspan="2" style="text-align:center;">'
+        header +=                                   '<hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>'
+        header +=                               '</td></tr>'
+        header +=                           '</table>'
+        header +=                       '</td>'
+        header +=                   '</tr>'
+        header +=               '</tbody>'
+        header +=           '</table>'
+        header +=       '</td>'
+        header +=     '</tr>'
+        header +=   '</table>'
+        return header
 
 
 
