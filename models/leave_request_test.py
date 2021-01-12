@@ -254,7 +254,7 @@ class HrLeave(models.Model):
             return {
                     'type': 'ir.actions.act_window',
                     'name': 'Warning : Customer is about or exceeded their credit limit',
-                    'res_model': 'create.leave.comment',
+                    'res_model': 'create.refuse.comment',
                     'view_type': 'form',
                     'view_mode': 'form',
                     'view_id': self.env.ref('ohrms_holidays_approval.view_create_refuse_comment',False).id,
