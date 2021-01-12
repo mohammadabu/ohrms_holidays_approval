@@ -222,21 +222,6 @@ class HrLeave(models.Model):
         # if validation_type == 'both': this method is the first approval approval
         # if validation_type != 'both': this method calls action_validate() below
         if self.multi_level_validation:
-            view_id=self.env['create.leave.comment']
-            new = view_id.create({
-                'comment' :'text'
-            })    
-            return {
-                    'type': 'ir.actions.act_window',
-                    'name': 'Warning : Customer is about or exceeded their credit limit',
-                    'res_model': 'create.leave.comment',
-                    'view_type': 'form',
-                    'view_mode': 'form',
-                    'res_id'    : new.id,
-                    'view_id': self.env.ref('ohrms_holidays_approval.view_create_leave_comment',False).id,
-                    'target': 'new',
-            }
-
             if any(holiday.state != 'confirm' for holiday in self):
                 raise UserError(_(
                     'Leave request must be confirmed ("To Approve") in order to approve it.'))
@@ -263,6 +248,21 @@ class HrLeave(models.Model):
             active_id = self.id
             
         user = self.env['hr.leave'].search([('id', '=', active_id)], limit=1)
+        view_id=self.env['create.leave.comment']
+            new = view_id.create({
+                'comment' :'wwwwwwwwwww'
+            })    
+            return {
+                    'type': 'ir.actions.act_window',
+                    'name': 'Warning : Customer is about or exceeded their credit limit',
+                    'res_model': 'create.leave.comment',
+                    'view_type': 'form',
+                    'view_mode': 'form',
+                    'res_id'    : new.id,
+                    'view_id': self.env.ref('ohrms_holidays_approval.view_create_leave_comment',False).id,
+                    'target': 'new',
+            }
+        comment =  self.env['create.leave.comment'].search([('id', '=', new.id)], limit=1).comment 
         for user_obj in user.leave_approvals:
             if user_obj.validation_status != True:
                 if user_obj.validators_type == 'direct_manager' and user.employee_id.parent_id.id != False:
@@ -272,6 +272,7 @@ class HrLeave(models.Model):
                                     [('id', '=', user_obj.id)])
                             validation_obj.validation_status = True
                             validation_obj.validation_refused = False
+                            validation_obj.leave_comments = comment
                 if  user_obj.validators_type == 'position':
                     employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',user_obj.holiday_validators_position.id),('user_id','=',current_uid)])
                     if len(employee) > 0:
@@ -279,12 +280,14 @@ class HrLeave(models.Model):
                                     [('id', '=', user_obj.id)])
                         validation_obj.validation_status = True
                         validation_obj.validation_refused = False
+                        validation_obj.leave_comments = comment
                 if  user_obj.validators_type == 'user':
                     if user_obj.holiday_validators_user.id == current_uid:
                         validation_obj = user.leave_approvals.search(
                                     [('id', '=', user_obj.id)])
                         validation_obj.validation_status = True
                         validation_obj.validation_refused = False
+                        validation_obj.leave_comments = comment
                 if not(user_obj.approval != True or (user_obj.approval == True and user_obj.validation_status == True)): 
                     break 
         approval_flag = True
