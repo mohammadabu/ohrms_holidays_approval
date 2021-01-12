@@ -251,7 +251,8 @@ class HrLeave(models.Model):
         }
         
     def create_comment(self):
-        new = view_id.create({
+        view_id=self.env['create.leave.comment']
+        new = view_id.sudo().create({
             'comment' :self.comment
         })
         current_uid = self.env.uid
@@ -264,7 +265,7 @@ class HrLeave(models.Model):
             active_id = self.id
             
         user = self.env['hr.leave'].search([('id', '=', active_id)], limit=1)
-        comment =  self.env['create.leave.comment'].search([('id', '=', new.id)], limit=1).comment 
+        comment =  self.env['create.leave.comment'].sudo().search([('id', '=', new.id)], limit=1).comment 
         for user_obj in user.leave_approvals:
             if user_obj.validation_status != True:
                 if user_obj.validators_type == 'direct_manager' and user.employee_id.parent_id.id != False:
