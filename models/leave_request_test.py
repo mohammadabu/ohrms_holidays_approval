@@ -224,7 +224,7 @@ class HrLeave(models.Model):
         if self.multi_level_validation:
             view_id=self.env['create.leave.comment']
             new = view_id.create({
-                comment = 'text'
+                'comment' :'text'
             })    
             return {
                     'type': 'ir.actions.act_window',
