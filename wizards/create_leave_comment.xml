@@ -15,12 +15,12 @@
             </form>
         </field>
     </record>
-    <record id="modal_create_leave_comment" model="ir.actions.act_window">
+    <!-- <record id="modal_create_leave_comment" model="ir.actions.act_window">
         <field name="name">Create Leave Comment</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">hr.leave</field>
         <field name="view_mode">form</field>
         <field name="view_id" ref=""/>
         <field name="target">new</field>
-    </record>
+    </record> -->
 </odoo>
