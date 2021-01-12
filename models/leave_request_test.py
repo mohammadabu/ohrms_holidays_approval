@@ -147,7 +147,7 @@ class HrLeave(models.Model):
                 if self.employee_id.parent_id.user_id.id != False:
                     if self.employee_id.parent_id.user_id.id == current_uid:
                         self.is_refused_user_id= True
-                        break
+                        # break
             # position
             if  l2.validators_type == 'position':
                 employees = self.env['hr.employee'].sudo().search([('multi_job_id','in',l2.holiday_validators_position.id)])
@@ -155,14 +155,14 @@ class HrLeave(models.Model):
                     for employee in employees:
                         if employee.user_id.id == current_uid:
                             self.is_refused_user_id= True
-                    break
+                    # break
             #user
             if  l2.validators_type == 'user':
                 if l2.holiday_validators_user.id == current_uid:
                     self.is_refused_user_id= True
-                    break
-            # if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
-            #     break        
+                    # break
+            if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
+                break        
     @api.onchange('holiday_status_id')
     def add_validators(self):
         """ Update the tree view and add new validators
