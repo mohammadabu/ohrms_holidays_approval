@@ -140,7 +140,7 @@ class HrLeave(models.Model):
     is_refused_user_id = fields.Boolean(default=False, compute='_check_is_refused_user_id')
     def _check_is_refused_user_id(self):
         current_uid = self.env.uid
-        self.is_refused_user_id = False
+        self.is_refused_user_id = True
         for l2 in self.leave_approvals: 
             # direct manager
             if l2.validators_type == 'direct_manager' and self.employee_id.parent_id.id != False:
