@@ -34,8 +34,8 @@
         <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//group[last()]" position="after">
-                <field name="is_approved_user_id" />
-                <field name="is_refused_user_id" />
+                <field name="is_approved_user_id" invisible="1"/>
+                <field name="is_refused_user_id" invisible="1"/>
                 <field name="multi_level_validation" invisible="1"/>
                 <notebook attrs="{'invisible': [('multi_level_validation', '=', False)]}">
                     <page string="Validation Status">
@@ -74,6 +74,9 @@
             <xpath expr="//button[@name='action_refuse']" position="replace">
                 <button string="Refuse" name="action_refuse" states="confirm,validate,validate1" type="object"
                         />
+            </xpath>
+            <xpath expr="//button[@name='action_refuse']" position="attributes">
+                <attribute name="attrs">{'invisible': ['|','&amp;',('is_refused_user_id', '!=', True),('multi_level_validation','==',True),('state','not in',["confirm","validate","validate1"])]}</attribute> 
             </xpath>
         </field>
     </record>
