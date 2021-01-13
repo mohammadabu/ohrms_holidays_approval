@@ -298,6 +298,7 @@ class HrLeave(models.Model):
     def create_header_for_email(self,holiday_status_id):
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
         leave_type = hr_holidays.name
+        company_id = hr_holidays.employee_id.company_id
         header = ''
         header += '<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">'                      
         header +=   '<tr>'
@@ -313,7 +314,7 @@ class HrLeave(models.Model):
         header +=                                       leave_type
         header +=                                   '</span>'
         header +=                               '</td><td valign="middle" align="right">'
-        header +=                                   '<img src="/logo.png?company= style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt=""/>'
+        header +=                                   '<img src="/logo.png?company='+company_id+' style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt=""/>'
         header +=                               '</td></tr>'
         header +=                               '<tr><td colspan="2" style="text-align:center;">'
         header +=                                   '<hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>'
