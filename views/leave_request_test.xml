@@ -74,12 +74,13 @@
             </xpath>
             <xpath expr="//button[@name='action_refuse']" position="replace">
                 <button string="Refuse" name="action_refuse" type="object"
+                    states="confirm,validate,validate1"
                         />
-                        <!-- states="confirm,validate,validate1" -->
+                        
             </xpath>
-            <xpath expr="//button[@name='action_refuse']" position="attributes">
+            <!-- <xpath expr="//button[@name='action_refuse']" position="attributes">
                 <attribute name="attrs">{'invisible': ['|','&amp;',('is_refused_user_id', '!=', True),('multi_level_validation','==',True),('state','not in',["confirm","validate","validate1"])]}</attribute> 
-            </xpath>
+            </xpath> -->
         </field>
     </record>
 
