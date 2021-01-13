@@ -138,32 +138,32 @@ class HrLeave(models.Model):
                         break
                 if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
                     break        
-    is_refused_user_id = fields.Boolean(default=False, compute='_check_is_refused_user_id')
-    def _check_is_refused_user_id(self):
-        current_uid = self.env.uid
-        self.is_refused_user_id = False
-        for l2 in self.leave_approvals: 
-            # direct manager
-            if l2.validators_type == 'direct_manager' and self.employee_id.parent_id.id != False:
-                if self.employee_id.parent_id.user_id.id != False:
-                    if self.employee_id.parent_id.user_id.id == current_uid:
-                        self.is_refused_user_id= True
-                        # break
-            # position
-            if  l2.validators_type == 'position':
-                employees = self.env['hr.employee'].sudo().search([('multi_job_id','in',l2.holiday_validators_position.id)])
-                if len(employees) > 0:
-                    for employee in employees:
-                        if employee.user_id.id == current_uid:
-                            self.is_refused_user_id= True
-                    # break
-            #user
-            if  l2.validators_type == 'user':
-                if l2.holiday_validators_user.id == current_uid:
-                    self.is_refused_user_id= True
-                    # break
-            if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
-                break        
+    is_refused_user_id = fields.Boolean(default=True, compute='_check_is_refused_user_id')
+    # def _check_is_refused_user_id(self):
+    #     current_uid = self.env.uid
+    #     self.is_refused_user_id = False
+    #     for l2 in self.leave_approvals: 
+    #         # direct manager
+    #         if l2.validators_type == 'direct_manager' and self.employee_id.parent_id.id != False:
+    #             if self.employee_id.parent_id.user_id.id != False:
+    #                 if self.employee_id.parent_id.user_id.id == current_uid:
+    #                     self.is_refused_user_id= True
+    #                     # break
+    #         # position
+    #         if  l2.validators_type == 'position':
+    #             employees = self.env['hr.employee'].sudo().search([('multi_job_id','in',l2.holiday_validators_position.id)])
+    #             if len(employees) > 0:
+    #                 for employee in employees:
+    #                     if employee.user_id.id == current_uid:
+    #                         self.is_refused_user_id= True
+    #                 # break
+    #         #user
+    #         if  l2.validators_type == 'user':
+    #             if l2.holiday_validators_user.id == current_uid:
+    #                 self.is_refused_user_id= True
+    #                 # break
+    #         if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
+    #             break        
     @api.onchange('holiday_status_id')
     def add_validators(self):
         """ Update the tree view and add new validators
