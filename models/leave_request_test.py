@@ -309,7 +309,7 @@ class HrLeave(models.Model):
         header +=                               '<tr><td valign="middle">'
         header +=                                   '<span style="font-size: 10px;">Leave Approval</span><br/>'
         header +=                                   '<span style="font-size: 20px; font-weight: bold;">'
-        header +=                                       leave_type
+        header +=                                       'leave_type'
         header +=                                   '</span>'
         header +=                               '</td><td valign="middle" align="right">'
         header +=                                   '<img src="/logo.png?company= style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt=""/>'
