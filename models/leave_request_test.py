@@ -347,7 +347,16 @@ class HrLeave(models.Model):
         header +=           '</table>'
         header +=       '</td>'
         header +=     '</tr>'
+
+
+        header +=     '<tr>'
+        header +=       '<td align="center" style="min-width: 590px;">'
+        header +=           '<table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">'
+        header +=               '<tr><td style="text-align: center; font-size: 13px;">'
+        header +=                   "Powered by "+ ('<a target="_blank" href="%s" style="color: #875A7B;">%s</a>') % (str(employee.company_id.website),str(employee.company_id.name)) 
+        header +=               '</td></tr>'
+        header +=           '</table>'
+        header +=       '</td>'
+        header +=     '</tr>'
         header +=   '</table>'
         return header
-
-
