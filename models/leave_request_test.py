@@ -276,13 +276,16 @@ class HrLeave(models.Model):
         for values in vals:
             holiday_status_id = values.get('holiday_status_id')
             employee_id = values.get('employee_id')
+            request_date_from = values.get('request_date_from')
+            request_date_to = values.get('request_date_to')
+            number_of_days = values.get('number_of_days')
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
         if hr_holidays.validation_type == "multi":
             employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
             message = ('<h4>Request approval to leave by %s<h4><br/>') % (employee.name)
-            message += ('<p style="font-size: 12px;">From %s</p><br/>') % (employee.request_date_from)
-            message += ('<p style="font-size: 12px;">To %s</p><br/>') % (employee.request_date_to)
-            message += ('<p style="font-size: 12px;">Duration: %s</p><br/>') % (employee.number_of_days)
+            message += ('<p style="font-size: 12px;">From %s</p><br/>') % (request_date_from)
+            message += ('<p style="font-size: 12px;">To %s</p><br/>') % (request_date_to)
+            message += ('<p style="font-size: 12px;">Duration: %s</p><br/>') % (number_of_days)
             body_html = self.create_body_for_email(message)
             email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)
             value = {
