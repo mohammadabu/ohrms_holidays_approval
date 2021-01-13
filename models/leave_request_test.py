@@ -273,6 +273,7 @@ class HrLeave(models.Model):
         return super(HrLeave, self).action_draft()
     @api.model_create_multi
     def create(self,vals):
+        rtn = super(HrLeave,self).create(vals)
         for values in vals:
             holiday_status_id = values.get('holiday_status_id')
             employee_id = values.get('employee_id')
@@ -282,7 +283,7 @@ class HrLeave(models.Model):
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
         if hr_holidays.validation_type == "multi":
             employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
-            message = ('<h4>Request approval to leave by %s<h4><br/>') % (employee.name)
+            message = ('<h4>Request approval to leave by %s<h4><br/>') % (rtn.id)
             message += ('<p style="font-size: 12px;">From %s</p><br/>') % (request_date_from)
             message += ('<p style="font-size: 12px;">To %s</p><br/>') % (request_date_to)
             message += ('<p style="font-size: 12px;">Duration: %s</p><br/>') % (number_of_days)
@@ -291,15 +292,13 @@ class HrLeave(models.Model):
             value = {
                 'subject': 'Approval of the leave',
                 'body_html': email_html,
-                'email_to': 'foo@example.com,bar@example.com',
-                'email_cc': 'qux@example.com',
+                'email_to': '',
+                'email_cc': '',
                 'auto_delete': False,
-                'email_from': 'foobar@example.com',
+                'email_from': 'odoo@odoo.com',
             }
             mail_id = self.env['mail.mail'].sudo().create(value)
             mail_id.sudo().send()
-      
-        rtn = super(HrLeave,self).create(vals)
         return rtn          
 
     def create_body_for_email(self,message):
