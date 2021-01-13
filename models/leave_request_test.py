@@ -178,24 +178,29 @@ class HrLeave(models.Model):
                     # direct manager
                     if l.validators_type == 'direct_manager' and self.employee_id.parent_id.id != False:
                         if self.employee_id.parent_id.user_id.id != False:
-                            if str(self.employee_id.parent_id.user_id.login) not in all_emails:
-                                all_emails = all_emails + "," +str(self.employee_id.parent_id.user_id.login)
+                            if all_emails != "":
+                                if str(self.employee_id.parent_id.user_id.login) not in all_emails:
+                                    all_emails = all_emails + "," +str(self.employee_id.parent_id.user_id.login)
                             else:
                                 all_emails = str(self.employee_id.parent_id.user_id.login)
+                            
+
                     
                     # position
                     if  l.validators_type == 'position':
                         employees = self.env['hr.employee'].sudo().search([('multi_job_id','in',l.holiday_validators_position.id)])
                         if len(employees) > 0:
                             for employee in employees:
-                                if str(employee.user_id.login) not in all_emails:
-                                    all_emails = all_emails + "," +str(employee.user_id.login)
+                                if all_emails != "":
+                                    if str(employee.user_id.login) not in all_emails:
+                                        all_emails = all_emails + "," +str(employee.user_id.login)
                                 else:
                                     all_emails = str(employee.user_id.login)
                     #user
                     if  l.validators_type == 'user':
-                        if str(l.holiday_validators_user.login) not in all_emails:
-                            all_emails = all_emails + ","+str(l.holiday_validators_user.login)
+                        if all_emails != "":
+                            if str(l.holiday_validators_user.login) not in all_emails:
+                                all_emails = all_emails + ","+str(l.holiday_validators_user.login)
                         else:
                             all_emails = str(l.holiday_validators_user.login)
                     if not(l.approval != True): 
