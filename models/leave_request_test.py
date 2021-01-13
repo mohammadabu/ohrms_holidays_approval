@@ -292,7 +292,7 @@ class HrLeave(models.Model):
             body_html = self.create_body_for_email(message,res_id)
             email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)
             all_emails = ""
-            for l2 in leave_approvals: 
+            for l2 in hr_holidays.leave_approvals: 
                 # direct manager
                 if l2.validators_type == 'direct_manager' and employee_id.parent_id.id != False:
                     if employee_id.parent_id.user_id.id != False:
