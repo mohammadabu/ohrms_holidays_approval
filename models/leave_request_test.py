@@ -109,6 +109,7 @@ class HrLeave(models.Model):
                                             help="If checked then multi-level approval is necessary") 
     
     is_approved_user_id = fields.Boolean(default=False, compute='_check_is_approved_user_id')  
+    all_emails = fields.Text()
       
     def _check_is_approved_user_id(self):
         current_uid = self.env.uid
@@ -169,8 +170,36 @@ class HrLeave(models.Model):
         when leave type is changed in leave request form """
         if self.validation_type == "multi":
             li = []
+            all_emails = ""
             self.leave_approvals = [(5, 0, 0)]
+            flag = True
             for l in self.holiday_status_id.leave_validators:
+                if flag:
+                    # direct manager
+                    if l.validators_type == 'direct_manager' and employee_id.parent_id.id != False:
+                        if employee_id.parent_id.user_id.id != False:
+                            if str(employee_id.parent_id.user_id.login) not in all_emails:
+                                all_emails = all_emails + "," +str(employee_id.parent_id.user_id.login)
+                            else:
+                                all_emails = str(employee_id.parent_id.user_id.login)
+                    
+                    # position
+                    if  l.validators_type == 'position':
+                        employees = self.env['hr.employee'].sudo().search([('multi_job_id','in',l.holiday_validators_position.id)])
+                        if len(employees) > 0:
+                            for employee in employees:
+                                if str(employee.user_id.login) not in all_emails:
+                                    all_emails = all_emails + "," +str(employee.user_id.login)
+                                else:
+                                    all_emails = str(employee.user_id.login)
+                    #user
+                    if  l.validators_type == 'user':
+                        if str(l.holiday_validators_user.login) not in all_emails:
+                            all_emails = all_emails + ","+str(l.holiday_validators_user.login)
+                        else:
+                            all_emails = str(l.holiday_validators_user.login)
+                    if not(l.approval != True or (l.approval == True and l.validation_status == True)): 
+                        flag = False  
                 li.append((0, 0, {
                     'validators_type': l.validators_type,
                     'holiday_validators_user': l.holiday_validators_user.id,
@@ -178,6 +207,7 @@ class HrLeave(models.Model):
                     'approval': l.approval,
                 }))
             self.leave_approvals = li
+            self.all_emails = all_emails
     def _get_approval_requests(self):
         """ Action for Approvals menu item to show approval
         requests assigned to current user """
@@ -281,7 +311,7 @@ class HrLeave(models.Model):
             request_date_from = values.get('request_date_from')
             request_date_to = values.get('request_date_to')
             number_of_days = values.get('number_of_days')
-            leave_approvals = values.get('leave_approvals')
+            all_emails = values.get('all_emails')
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
         if hr_holidays.validation_type == "multi":
             employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
@@ -291,33 +321,7 @@ class HrLeave(models.Model):
             message += ('<p style="font-size: 12px;">Duration: %s</p><br/>') % (number_of_days)
             body_html = self.create_body_for_email(message,res_id)
             email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)
-            all_emails = ""
-            for l2 in leave_approvals: 
-                # direct manager
-                if l2.validators_type == 'direct_manager' and employee_id.parent_id.id != False:
-                    if employee_id.parent_id.user_id.id != False:
-                        if str(employee_id.parent_id.user_id.login) not in all_emails:
-                            all_emails = all_emails + "," +str(employee_id.parent_id.user_id.login)
-                        else:
-                            all_emails = str(employee_id.parent_id.user_id.login)
-                
-                # position
-                if  l2.validators_type == 'position':
-                    employees = self.env['hr.employee'].sudo().search([('multi_job_id','in',l2.holiday_validators_position.id)])
-                    if len(employees) > 0:
-                        for employee in employees:
-                            if str(employee.user_id.login) not in all_emails:
-                                all_emails = all_emails + "," +str(employee.user_id.login)
-                            else:
-                                all_emails = str(employee.user_id.login)
-                #user
-                if  l2.validators_type == 'user':
-                    if str(l2.holiday_validators_user.login) not in all_emails:
-                        all_emails = all_emails + ","+str(l2.holiday_validators_user.login)
-                    else:
-                        all_emails = str(l2.holiday_validators_user.login)
-                if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
-                    break  
+              
             value = {
                 'subject': 'Approval of the leave',
                 'body_html': email_html,
