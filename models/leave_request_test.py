@@ -332,7 +332,7 @@ class HrLeave(models.Model):
         header +=          '<td align="center" style="min-width: 590px;">' 
         header +=               '<table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">'
         header +=                   '<tr><td valign="middle" align="left">'
-        header +=                       str(company_id)
+        # header +=                       str(company_id)
         header +=                   '</td></tr>'
         header +=                   '<tr><td valign="middle" align="left" style="opacity: 0.7;">'
         # header +=                       str(employee.company_id.phone)                
