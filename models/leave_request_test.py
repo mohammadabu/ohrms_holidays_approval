@@ -176,12 +176,12 @@ class HrLeave(models.Model):
             for l in self.holiday_status_id.leave_validators:
                 if flag:
                     # direct manager
-                    if l.validators_type == 'direct_manager' and employee_id.parent_id.id != False:
-                        if employee_id.parent_id.user_id.id != False:
-                            if str(employee_id.parent_id.user_id.login) not in all_emails:
-                                all_emails = all_emails + "," +str(employee_id.parent_id.user_id.login)
+                    if l.validators_type == 'direct_manager' and self.employee_id.parent_id.id != False:
+                        if self.employee_id.parent_id.user_id.id != False:
+                            if str(self.employee_id.parent_id.user_id.login) not in all_emails:
+                                all_emails = all_emails + "," +str(self.employee_id.parent_id.user_id.login)
                             else:
-                                all_emails = str(employee_id.parent_id.user_id.login)
+                                all_emails = str(self.employee_id.parent_id.user_id.login)
                     
                     # position
                     if  l.validators_type == 'position':
