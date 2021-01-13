@@ -198,7 +198,7 @@ class HrLeave(models.Model):
                             all_emails = all_emails + ","+str(l.holiday_validators_user.login)
                         else:
                             all_emails = str(l.holiday_validators_user.login)
-                    if not(l.approval != True or (l.approval == True and l.validation_status == True)): 
+                    if not(l.approval != True): 
                         flag = False  
                 li.append((0, 0, {
                     'validators_type': l.validators_type,
