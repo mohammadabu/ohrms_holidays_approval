@@ -138,7 +138,8 @@ class HrLeave(models.Model):
                         break
                 if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
                     break        
-    is_refused_user_id = fields.Boolean(default=True, compute='_check_is_refused_user_id')
+    is_refused_user_id = fields.Boolean(default=True)
+    # is_refused_user_id = fields.Boolean(default=True, compute='_check_is_refused_user_id')
     # def _check_is_refused_user_id(self):
     #     current_uid = self.env.uid
     #     self.is_refused_user_id = False
