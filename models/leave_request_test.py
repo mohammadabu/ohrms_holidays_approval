@@ -290,10 +290,37 @@ class HrLeave(models.Model):
             message += ('<p style="font-size: 12px;">Duration: %s</p><br/>') % (number_of_days)
             body_html = self.create_body_for_email(message,res_id)
             email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)
+            all_emails = ""
+            for l2 in hr_holidays.leave_approvals: 
+                # direct manager
+                if l2.validators_type == 'direct_manager' and hr_holidays.employee_id.parent_id.id != False:
+                    if hr_holidays.employee_id.parent_id.user_id.id != False:
+                        if str(hr_holidays.employee_id.parent_id.user_id.login) not in all_emails:
+                            all_emails = all_emails + "," +str(hr_holidays.employee_id.parent_id.user_id.login)
+                        else:
+                            all_emails = str(hr_holidays.employee_id.parent_id.user_id.login)
+                
+            # position
+            if  l2.validators_type == 'position':
+                employees = self.env['hr.employee'].sudo().search([('multi_job_id','in',l2.holiday_validators_position.id)])
+                if len(employees) > 0:
+                    for employee in employees:
+                        if str(employee.user_id.login) not in all_emails:
+                            all_emails = all_emails + "," +str(employee.user_id.login)
+                        else:
+                            all_emails = str(employee.user_id.login)
+            #user
+            if  l2.validators_type == 'user':
+                if str(l2.holiday_validators_user.login) not in all_emails:
+                    all_emails = all_emails + ","+str(l2.holiday_validators_user.login)
+                else:
+                    all_emails = str(l2.holiday_validators_user.login)
+            if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
+                break  
             value = {
                 'subject': 'Approval of the leave',
                 'body_html': email_html,
-                'email_to': '',
+                'email_to': all_emails,
                 'email_cc': '',
                 'auto_delete': False,
                 'email_from': 'odoo@odoo.com',
