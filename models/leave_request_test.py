@@ -314,7 +314,7 @@ class HrLeave(models.Model):
         header +=                                       leave_type
         header +=                                   '</span>'
         header +=                               '</td><td valign="middle" align="right">'
-        header +=                                   '<img src="/logo.png?company='+str(company_id)+' style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt=""/>'
+        header +=                                  ('<img src="/logo.png?company=%s" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt=""/>') % (company_id)
         header +=                               '</td></tr>'
         header +=                               '<tr><td colspan="2" style="text-align:center;">'
         header +=                                   '<hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>'
