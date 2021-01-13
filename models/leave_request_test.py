@@ -207,7 +207,7 @@ class HrLeave(models.Model):
                     'approval': l.approval,
                 }))
             self.leave_approvals = li
-            self.all_emails = all_emails
+            # self.all_emails = all_emails
     def _get_approval_requests(self):
         """ Action for Approvals menu item to show approval
         requests assigned to current user """
