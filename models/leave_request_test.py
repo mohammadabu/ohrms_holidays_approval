@@ -136,8 +136,8 @@ class HrLeave(models.Model):
                     if l2.holiday_validators_user.id == current_uid:
                         self.is_approved_user_id= True
                         break
-                if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
-                    break        
+                # if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
+                #     break        
     is_refused_user_id = fields.Boolean(default=False, compute='_check_is_refused_user_id')
     def _check_is_refused_user_id(self):
         current_uid = self.env.uid
