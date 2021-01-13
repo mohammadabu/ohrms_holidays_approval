@@ -300,23 +300,23 @@ class HrLeave(models.Model):
                         else:
                             all_emails = str(hr_holidays.employee_id.parent_id.user_id.login)
                 
-            # position
-            if  l2.validators_type == 'position':
-                employees = self.env['hr.employee'].sudo().search([('multi_job_id','in',l2.holiday_validators_position.id)])
-                if len(employees) > 0:
-                    for employee in employees:
-                        if str(employee.user_id.login) not in all_emails:
-                            all_emails = all_emails + "," +str(employee.user_id.login)
-                        else:
-                            all_emails = str(employee.user_id.login)
-            #user
-            if  l2.validators_type == 'user':
-                if str(l2.holiday_validators_user.login) not in all_emails:
-                    all_emails = all_emails + ","+str(l2.holiday_validators_user.login)
-                else:
-                    all_emails = str(l2.holiday_validators_user.login)
-            if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
-                break  
+                # position
+                if  l2.validators_type == 'position':
+                    employees = self.env['hr.employee'].sudo().search([('multi_job_id','in',l2.holiday_validators_position.id)])
+                    if len(employees) > 0:
+                        for employee in employees:
+                            if str(employee.user_id.login) not in all_emails:
+                                all_emails = all_emails + "," +str(employee.user_id.login)
+                            else:
+                                all_emails = str(employee.user_id.login)
+                #user
+                if  l2.validators_type == 'user':
+                    if str(l2.holiday_validators_user.login) not in all_emails:
+                        all_emails = all_emails + ","+str(l2.holiday_validators_user.login)
+                    else:
+                        all_emails = str(l2.holiday_validators_user.login)
+                if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
+                    break  
             value = {
                 'subject': 'Approval of the leave',
                 'body_html': email_html,
