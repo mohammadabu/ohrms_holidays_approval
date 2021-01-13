@@ -278,6 +278,7 @@ class HrLeave(models.Model):
             employee_id = values.get('employee_id')
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
         if hr_holidays.validation_type == "multi":
+            employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
             message = ('<h4>Request approval to leave by %s<h4><br/>') % (employee.name)
             message += ('<p style="font-size: 12px;">From %s</p><br/>') % (employee.request_date_from)
             message += ('<p style="font-size: 12px;">To %s</p><br/>') % (employee.request_date_to)
