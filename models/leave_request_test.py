@@ -235,8 +235,8 @@ class HrLeave(models.Model):
                 if  l2.validators_type == 'user':
                     if l2.holiday_validators_user.id == current_uid:
                         li.append(l.id)
-                if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
-                    break                                 
+                # if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
+                #     break                                 
         value = {
             'domain': str([('id', 'in', li)]),
             'view_mode': 'tree,form',
