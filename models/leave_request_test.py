@@ -274,6 +274,7 @@ class HrLeave(models.Model):
     @api.model_create_multi
     def create(self,vals):
         rtn = super(HrLeave,self).create(vals)
+        res_id = rtn.id
         for values in vals:
             holiday_status_id = values.get('holiday_status_id')
             employee_id = values.get('employee_id')
@@ -287,7 +288,7 @@ class HrLeave(models.Model):
             message += ('<p style="font-size: 12px;">From %s</p><br/>') % (request_date_from)
             message += ('<p style="font-size: 12px;">To %s</p><br/>') % (request_date_to)
             message += ('<p style="font-size: 12px;">Duration: %s</p><br/>') % (number_of_days)
-            body_html = self.create_body_for_email(message)
+            body_html = self.create_body_for_email(message,res_id)
             email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)
             value = {
                 'subject': 'Approval of the leave',
@@ -301,7 +302,7 @@ class HrLeave(models.Model):
             mail_id.sudo().send()
         return rtn          
 
-    def create_body_for_email(self,message):
+    def create_body_for_email(self,message,res_id):
         body_html = ''
         body_html +='<tr>'
         body_html +=    '<td align="center" style="min-width: 590px;">'
@@ -312,7 +313,7 @@ class HrLeave(models.Model):
         body_html +=                        message
         body_html +=                    '</p>'
         body_html +=                    '<p style="margin-top: 24px; margin-bottom: 16px;">'
-        body_html +=                        '<a href="/mail/view?model=hr.leave&amp;res_id=" style="background-color:#875A7B; padding: 10px; text-decoration: none; color: #fff; border-radius: 5px;">'
+        body_html +=                        ('<a href="/mail/view?model=hr.leave&amp;res_id=%s" style="background-color:#875A7B; padding: 10px; text-decoration: none; color: #fff; border-radius: 5px;">') % (res_id)
         body_html +=                            'View Leave'
         body_html +=                        '</a>'
         body_html +=                    '</p>'
