@@ -281,6 +281,7 @@ class HrLeave(models.Model):
             request_date_from = values.get('request_date_from')
             request_date_to = values.get('request_date_to')
             number_of_days = values.get('number_of_days')
+            leave_approvals = values.get('leave_approvals')
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
         if hr_holidays.validation_type == "multi":
             employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
@@ -291,14 +292,14 @@ class HrLeave(models.Model):
             body_html = self.create_body_for_email(message,res_id)
             email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)
             all_emails = ""
-            for l2 in hr_holidays.leave_approvals: 
+            for l2 in leave_approvals: 
                 # direct manager
-                if l2.validators_type == 'direct_manager' and hr_holidays.employee_id.parent_id.id != False:
-                    if hr_holidays.employee_id.parent_id.user_id.id != False:
-                        if str(hr_holidays.employee_id.parent_id.user_id.login) not in all_emails:
-                            all_emails = all_emails + "," +str(hr_holidays.employee_id.parent_id.user_id.login)
+                if l2.validators_type == 'direct_manager' and employee_id.parent_id.id != False:
+                    if employee_id.parent_id.user_id.id != False:
+                        if str(employee_id.parent_id.user_id.login) not in all_emails:
+                            all_emails = all_emails + "," +str(employee_id.parent_id.user_id.login)
                         else:
-                            all_emails = str(hr_holidays.employee_id.parent_id.user_id.login)
+                            all_emails = str(employee_id.parent_id.user_id.login)
                 
                 # position
                 if  l2.validators_type == 'position':
