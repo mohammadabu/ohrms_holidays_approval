@@ -307,9 +307,9 @@ class HrLeave(models.Model):
         header +=                       '<td align="center" style="min-width: 590px;">'
         header +=                           '<table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">'
         header +=                               '<tr><td valign="middle">'
-        header +=                                   '<span style="font-size: 10px;">Your Lead/Opportunity</span><br/>'
+        header +=                                   '<span style="font-size: 10px;">Leave Approval</span><br/>'
         header +=                                   '<span style="font-size: 20px; font-weight: bold;">'
-        header +=                                       'object.name'
+        header +=                                       self.holiday_status_id
         header +=                                   '</span>'
         header +=                               '</td><td valign="middle" align="right">'
         header +=                                   '<img src="/logo.png?company= style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt=""/>'
