@@ -294,7 +294,7 @@ class HrLeave(models.Model):
         rtn = super(HrLeave,self).create(vals)
         return rtn          
 
-    def create_body_for_email(self):
+    # def create_body_for_email(self):
 
     def create_header_footer_for_email(self,holiday_status_id,employee_id,body_html):
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
