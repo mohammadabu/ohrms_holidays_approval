@@ -311,7 +311,7 @@ class HrLeave(models.Model):
             request_date_from = values.get('request_date_from')
             request_date_to = values.get('request_date_to')
             number_of_days = values.get('number_of_days')
-            all_emails = values.get('all_emails')
+            # all_emails = values.get('all_emails')
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
         if hr_holidays.validation_type == "multi":
             employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
@@ -325,7 +325,7 @@ class HrLeave(models.Model):
             value = {
                 'subject': 'Approval of the leave',
                 'body_html': email_html,
-                'email_to': all_emails,
+                'email_to': 'all_emails',
                 'email_cc': '',
                 'auto_delete': False,
                 'email_from': 'odoo@odoo.com',
