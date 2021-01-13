@@ -332,40 +332,17 @@ class HrLeave(models.Model):
         header +=          '<td align="center" style="min-width: 590px;">' 
         header +=               '<table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">'
         header +=                   '<tr><td valign="middle" align="left">'
-        # header +=                       str(company_id)
+        header +=                       str(employee.company_id.name)
         header +=                   '</td></tr>'
         header +=                   '<tr><td valign="middle" align="left" style="opacity: 0.7;">'
-        # header +=                       str(employee.company_id.phone)                
+        header +=                       str(employee.company_id.phone)                
+        # if employee.company_id.email:
+        #     header += ('<a href="'mailto:%s'" style="text-decoration:none; color: #454748;">%s</a>') % (str(employee.company_id.email),str(employee.company_id.email)
         header +=                   '</td></tr>'
         header +=               '</table>'
         header +=          '</td>'
         header +=       '</tr>'
         header +=   '</table>'
         return header
-
-
-
-
-
-<tr>
-                        <td align="center" style="min-width: 590px;">
-                          <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
-                              <tr><td valign="middle" align="left">
-                                  ${object.company_id.name}
-                              </td></tr>
-                              <tr><td valign="middle" align="left" style="opacity: 0.7;">
-                                  ${object.company_id.phone}
-                                  % if object.company_id.email
-                                      | <a href="'mailto:%s' % ${object.company_id.email}" style="text-decoration:none; color: #454748;">${object.company_id.email}</a>
-                                  % endif
-                                  % if object.company_id.website
-                                      | <a href="'%s' % ${object.company_id.website}" style="text-decoration:none; color: #454748;">
-                                      ${object.company_id.website}
-                                  </a>
-                                  % endif
-                              </td></tr>
-                          </table>
-                        </td>
-                      </tr>
 
 
