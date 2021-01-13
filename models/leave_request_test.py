@@ -279,7 +279,7 @@ class HrLeave(models.Model):
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
         if hr_holidays.validation_type == "multi":
             
-            body_html = self.create_header_for_email(hr_holidays)
+            body_html = self.create_header_for_email()
             value = {
                 'subject': 'Foo',
                 'body_html': body_html,
@@ -295,7 +295,7 @@ class HrLeave(models.Model):
         return rtn          
 
 
-    def create_header_for_email(self,hr_holidays):
+    def create_header_for_email(self):
         # leave_type = hr_holidays.id.name
         header = ''
         header += '<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">'                      
