@@ -278,7 +278,7 @@ class HrLeave(models.Model):
             employee_id = values.get('employee_id')
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
         if hr_holidays.validation_type == "multi":
-            body_html = ""
+            body_html = self.create_body_for_email("")
             email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)
             value = {
                 'subject': 'Foo',
@@ -294,7 +294,35 @@ class HrLeave(models.Model):
         rtn = super(HrLeave,self).create(vals)
         return rtn          
 
-    # def create_body_for_email(self):
+    def create_body_for_email(self,message):
+        body_html = ''
+        body_html +='<tr>'
+        body_html +=    '<td align="center" style="min-width: 590px;">'
+        body_html +=        '<table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">'
+        body_html +=            '<tr>'
+        body_html +=                '<td valign="top" style="font-size: 13px;">'
+        body_html +=                    '<p style="margin: 0px;font-size: 14px;">'
+        body_html +=                        message
+        body_html +=                    '</p>'
+        body_html +=                    '<p style="margin-top: 24px; margin-bottom: 16px;">'
+        body_html +=                        '<a href="/mail/view?model=hr.leave&amp;res_id=" style="background-color:#875A7B; padding: 10px; text-decoration: none; color: #fff; border-radius: 5px;">'
+        body_html +=                            'View Leave'
+        body_html +=                        '</a>'
+        body_html +=                    '</p>'
+        body_html +=                    'Thanks,<br/>'
+        body_html +=                '</td>'
+        body_html +=            '</tr>'
+        body_html +=            '<tr>'
+        body_html +=                '<td style="text-align:center;">'
+        body_html +=                    '<hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>'
+        body_html +=                '</td>'
+        body_html +=            '</tr>'
+        body_html +=        '</table>'
+        body_html +=    '</td>'
+        body_html +='</tr>'
+        return body_html
+         
+                                  
 
     def create_header_footer_for_email(self,holiday_status_id,employee_id,body_html):
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
@@ -347,8 +375,6 @@ class HrLeave(models.Model):
         header +=           '</table>'
         header +=       '</td>'
         header +=     '</tr>'
-
-
         header +=     '<tr>'
         header +=       '<td align="center" style="min-width: 590px;">'
         header +=           '<table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">'
