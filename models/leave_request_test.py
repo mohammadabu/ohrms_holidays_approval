@@ -306,6 +306,7 @@ class HrLeave(models.Model):
         header +=       '<td align="center">' 
         header +=           '<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">'
         header +=               '<tbody>'
+
         header +=                   '<tr>'
         header +=                       '<td align="center" style="min-width: 590px;">'
         header +=                           '<table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">'
@@ -323,6 +324,7 @@ class HrLeave(models.Model):
         header +=                           '</table>'
         header +=                       '</td>'
         header +=                   '</tr>'
+        
         header +=               '</tbody>'
         header +=           '</table>'
         header +=       '</td>'
@@ -338,6 +340,8 @@ class HrLeave(models.Model):
         header +=                       str(employee.company_id.phone)                
         if employee.company_id.email:
             header += ('<a href="mailto:%s" style="text-decoration:none; color: #454748;">%s</a>') % (str(employee.company_id.email),str(employee.company_id.email))
+        if employee.company_id.website:
+            header += ('<a href="%s" style="text-decoration:none; color: #454748;">') % (str(employee.company_id.website))    
         header +=                   '</td></tr>'
         header +=               '</table>'
         header +=          '</td>'
