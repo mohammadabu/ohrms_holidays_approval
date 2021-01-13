@@ -278,11 +278,11 @@ class HrLeave(models.Model):
             employee_id = values.get('employee_id')
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
         if hr_holidays.validation_type == "multi":
-            
-            body_html = self.create_header_for_email(holiday_status_id,employee_id)
+            body_html = ""
+            email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)
             value = {
                 'subject': 'Foo',
-                'body_html': body_html,
+                'body_html': email_html,
                 'email_to': 'foo@example.com,bar@example.com',
                 'email_cc': 'qux@example.com',
                 'auto_delete': False,
@@ -294,8 +294,9 @@ class HrLeave(models.Model):
         rtn = super(HrLeave,self).create(vals)
         return rtn          
 
+    def create_body_for_email(self):
 
-    def create_header_for_email(self,holiday_status_id,employee_id):
+    def create_header_footer_for_email(self,holiday_status_id,employee_id,body_html):
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
         employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
         leave_type = hr_holidays.name
@@ -324,28 +325,28 @@ class HrLeave(models.Model):
         header +=                           '</table>'
         header +=                       '</td>'
         header +=                   '</tr>'
+        header +=                   body_html
+        header +=                   '<tr>' 
+        header +=                       '<td align="center" style="min-width: 590px;">' 
+        header +=                           '<table border="0" cellpadding="0" cellspacing="0" width="622px" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 24px; border-collapse:separate;">'
+        header +=                               '<tr><td valign="middle" align="left">'
+        header +=                                   str(employee.company_id.name)
+        header +=                               '</td></tr>'
+        header +=                               '<tr><td valign="middle" align="left" style="opacity: 0.7;">'
+        header +=                                   str(employee.company_id.phone)                
+        if employee.company_id.email:
+            header += ('<a href="mailto:%s" style="text-decoration:none; color: #454748;">%s</a>') % (str(employee.company_id.email),str(employee.company_id.email))
+        if employee.company_id.website:
+            header += ('<a href="%s" style="text-decoration:none; color: #454748;">') % (str(employee.company_id.website))    
+        header +=                               '</td></tr>'
+        header +=                           '</table>'
+        header +=                       '</td>'
+        header +=                   '</tr>'
 
         header +=               '</tbody>'
         header +=           '</table>'
         header +=       '</td>'
         header +=     '</tr>'
-
-        header +=      '<tr>' 
-        header +=          '<td align="center" style="min-width: 590px;">' 
-        header +=               '<table border="0" cellpadding="0" cellspacing="0" width="622px" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 24px; border-collapse:separate;">'
-        header +=                   '<tr><td valign="middle" align="left">'
-        header +=                       str(employee.company_id.name)
-        header +=                   '</td></tr>'
-        header +=                   '<tr><td valign="middle" align="left" style="opacity: 0.7;">'
-        header +=                       str(employee.company_id.phone)                
-        if employee.company_id.email:
-            header += ('<a href="mailto:%s" style="text-decoration:none; color: #454748;">%s</a>') % (str(employee.company_id.email),str(employee.company_id.email))
-        if employee.company_id.website:
-            header += ('<a href="%s" style="text-decoration:none; color: #454748;">') % (str(employee.company_id.website))    
-        header +=                   '</td></tr>'
-        header +=               '</table>'
-        header +=          '</td>'
-        header +=       '</tr>'
         header +=   '</table>'
         return header
 
