@@ -296,7 +296,7 @@ class HrLeave(models.Model):
 
 
     def create_header_for_email(self,hr_holidays):
-        
+        leave_type = hr_holidays.id.name
         header = ''
         header += '<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">'                      
         header +=   '<tr>'
@@ -309,7 +309,7 @@ class HrLeave(models.Model):
         header +=                               '<tr><td valign="middle">'
         header +=                                   '<span style="font-size: 10px;">Leave Approval</span><br/>'
         header +=                                   '<span style="font-size: 20px; font-weight: bold;">'
-        header +=                                       hr_holidays.name
+        header +=                                       'hr_holidays.name'
         header +=                                   '</span>'
         header +=                               '</td><td valign="middle" align="right">'
         header +=                                   '<img src="/logo.png?company= style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt=""/>'
