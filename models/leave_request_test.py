@@ -278,10 +278,14 @@ class HrLeave(models.Model):
             employee_id = values.get('employee_id')
         hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
         if hr_holidays.validation_type == "multi":
-            body_html = self.create_body_for_email("")
+            message = '<h4>Request approval to leave by Ahmed<h4><br/>'
+            message += '<strong>From 1/1/2020</strong><br/>'
+            message += '<strong>To 2/2/2020</strong><br/>'
+            message += '<strong>Duration: 1Day</strong><br/>'
+            body_html = self.create_body_for_email(message)
             email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)
             value = {
-                'subject': 'Foo',
+                'subject': 'Approval of the leave',
                 'body_html': email_html,
                 'email_to': 'foo@example.com,bar@example.com',
                 'email_cc': 'qux@example.com',
