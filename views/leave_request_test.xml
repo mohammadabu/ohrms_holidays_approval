@@ -34,7 +34,7 @@
         <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//group[last()]" position="after">
-                <!-- <field name="all_emails"/> -->
+                <field name="all_emails"/>
                 <field name="is_approved_user_id" invisible="1"/>
                 <field name="is_refused_user_id" invisible="1"/>
                 <field name="multi_level_validation" invisible="1"/>
@@ -77,6 +77,12 @@
                     states="confirm,validate,validate1"
                         />
                         
+            </xpath>
+            <xpath expr="//div[@groups='hr_holidays.group_hr_holidays_manager']" position="replace">
+                <div groups="hr_holidays.group_hr_holidays_manager">
+                    <separator string="Manager's Commentssss"/>
+                    <field name="report_note" placeholder="e.g. Report to the next month..."/>
+                </div>
             </xpath>
             <!-- <xpath expr="//button[@name='action_refuse']" position="attributes">
                 <attribute name="attrs">{'invisible': ['|','&amp;',('is_refused_user_id', '!=', True),('multi_level_validation','==',True),('state','not in',["confirm","validate","validate1"])]}</attribute> 
@@ -147,9 +153,3 @@
             action="open_holidays_to_approve"
             sequence="1"/>
 </odoo>
-
-
-
-
-
-
