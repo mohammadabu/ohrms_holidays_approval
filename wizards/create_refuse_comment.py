@@ -15,6 +15,8 @@ class CreateLeaveComment(models.TransientModel):
                 [('user_id', '=', self.env.uid)], limit=1)
         approval_access = False
         current_uid = self.env.uid
+        leave_self = self.env['hr.leave'].search([('id', '=', active_id)], limit=1)
+        comment =  self.env['create.refuse.comment'].sudo().search([('id', '=', new.id)], limit=1).comment
         if self.env.context.get('active_id'):
             active_id = self.env.context.get('active_id')
         else:
@@ -39,8 +41,6 @@ class CreateLeaveComment(models.TransientModel):
             # if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
             #     break     
         if approval_access:
-            leave_self = self.env['hr.leave'].search([('id', '=', active_id)], limit=1)
-            comment =  self.env['create.refuse.comment'].sudo().search([('id', '=', new.id)], limit=1).comment
             for holiday in leave_self:
                 if holiday.state not in ['confirm', 'validate', 'validate1']:
                     raise UserError(_(
@@ -62,23 +62,29 @@ class CreateLeaveComment(models.TransientModel):
                 if user_obj.validators_type == 'direct_manager' and leave_self.employee_id.parent_id.id != False:
                     if leave_self.employee_id.parent_id.user_id.id != False:
                         if leave_self.employee_id.parent_id.user_id.id == current_uid:
+
                             validation_obj = leave_self.leave_approvals.search(
                                     [('id', '=', user_obj.id)])
+                            
                             validation_obj.validation_status = False
                             validation_obj.validation_refused = True
                             validation_obj.leave_comments = comment
                 if  user_obj.validators_type == 'position':
                     employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',user_obj.holiday_validators_position.id),('user_id','=',current_uid)])
                     if len(employee) > 0:
+
                         validation_obj = leave_self.leave_approvals.search(
                                     [('id', '=', user_obj.id)])
+
                         validation_obj.validation_status = False
                         validation_obj.validation_refused = True
                         validation_obj.leave_comments = comment
                 if  user_obj.validators_type == 'user':
                     if user_obj.holiday_validators_user.id == current_uid:
+
                         validation_obj = leave_self.leave_approvals.search(
                                     [('id', '=', user_obj.id)])
+
                         validation_obj.validation_status = False
                         validation_obj.validation_refused = True
                         validation_obj.leave_comments = comment
