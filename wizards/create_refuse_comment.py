@@ -22,7 +22,7 @@ class CreateLeaveComment(models.TransientModel):
             
         leave_self = self.env['hr.leave'].search([('id', '=', active_id)], limit=1)
 
-        leave_self.is_refused_user_id = False
+        # leave_self.is_refused_user_id = False
         comment =  self.env['create.refuse.comment'].sudo().search([('id', '=', new.id)], limit=1).comment
         for l2 in leave_self.leave_approvals: 
             # direct manager
@@ -41,8 +41,8 @@ class CreateLeaveComment(models.TransientModel):
             if  l2.validators_type == 'user':
                 if l2.holiday_validators_user.id == current_uid:
                     approval_access= True
-            if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
-                break     
+            # if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
+            #     break     
         if approval_access:
             for holiday in leave_self:
                 if holiday.state not in ['confirm', 'validate', 'validate1']:
