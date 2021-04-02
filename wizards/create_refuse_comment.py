@@ -15,12 +15,15 @@ class CreateLeaveComment(models.TransientModel):
                 [('user_id', '=', self.env.uid)], limit=1)
         approval_access = False
         current_uid = self.env.uid
-        leave_self = self.env['hr.leave'].search([('id', '=', active_id)], limit=1)
-        comment =  self.env['create.refuse.comment'].sudo().search([('id', '=', new.id)], limit=1).comment
         if self.env.context.get('active_id'):
             active_id = self.env.context.get('active_id')
         else:
             active_id = self.id
+        
+        leave_self = self.env['hr.leave'].sudo().search([('id', '=', active_id)], limit=1)
+        comment =  self.env['create.refuse.comment'].sudo().search([('id', '=', new.id)], limit=1).comment
+        
+        
         for l2 in leave_self.leave_approvals: 
             # direct manager
             if l2.validators_type == 'direct_manager' and leave_self.employee_id.parent_id.id != False:
