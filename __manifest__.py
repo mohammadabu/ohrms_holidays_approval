@@ -16,8 +16,8 @@
         # 'views/leave_request_test.xml',
         # 'data/mail_template.xml',
         # 'views/leave_request.xml',
-        'security/ir.model.access.csv',
-        'security/security.xml'
+        # 'security/ir.model.access.csv',
+        # 'security/security.xml'
     ],
     'demo': [],
     'images': ['static/description/banner.png'],
