@@ -28,7 +28,7 @@
             </xpath>
         </field>
     </record>
-    <record id="edit_hr_leave_view_form_manager" model="ir.ui.view">
+    <!-- <record id="edit_hr_leave_view_form_manager" model="ir.ui.view">
         <field name="name">edit_hr_leave_view_form_manager</field>
         <field name="model">hr.leave</field>
         <field name="inherit_id" ref="hr_holidays.hr_leave_view_form_manager"/>
@@ -40,7 +40,7 @@
                 </div>
             </xpath>
         </field>    
-    </record>
+    </record> -->
     <record id="hr_holidays_status_validators_leave_create" model="ir.ui.view">
         <field name="name">hr.holidays.double.validation.create.leave</field>
         <field name="model">hr.leave</field>
