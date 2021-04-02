@@ -28,10 +28,10 @@
             </xpath>
         </field>
     </record>
-    <record id="hr_holidays_status_validators_leave_create" model="ir.ui.view">
-        <field name="name">hr.holidays.double.validation.create.leave</field>
+    <record id="edit_hr_leave_view_form_manager" model="ir.ui.view">
+        <field name="name">edit_hr_leave_view_form_manager</field>
         <field name="model">hr.leave</field>
-        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form_manager"/>
         <field name="arch" type="xml">
             <xpath expr="//div[@groups='hr_holidays.group_hr_holidays_manager']" position="replace">
                 <div groups="hr_holidays.group_hr_holidays_manager">
@@ -39,6 +39,13 @@
                     <field name="report_note" placeholder="e.g. Report to the next month..."/>
                 </div>
             </xpath>
+        </field>    
+    </record>
+    <record id="hr_holidays_status_validators_leave_create" model="ir.ui.view">
+        <field name="name">hr.holidays.double.validation.create.leave</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+        <field name="arch" type="xml">
             <xpath expr="//group[last()]" position="after">
                 <!-- <field name="all_emails"/> -->
                 <field name="is_approved_user_id" invisible="1"/>
