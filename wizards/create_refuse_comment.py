@@ -4,8 +4,6 @@ class CreateLeaveComment(models.TransientModel):
     _name = 'create.refuse.comment'
     comment = fields.Text()
     
-
-
     def create_refuse_comment(self):
         view_id=self.env['create.refuse.comment']
         new = view_id.sudo().create({
@@ -151,7 +149,6 @@ class CreateLeaveComment(models.TransientModel):
             return True
     def cancel_refuse_comment(self):
         return {'type': 'ir.actions.act_window_close'}        
-
 
     def create_body_for_email(self,message,res_id):
         body_html = ''

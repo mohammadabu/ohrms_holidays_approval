@@ -11,7 +11,7 @@ class HrLeaveTypes(models.Model):
 
     multi_level_validation = fields.Boolean(string='Multiple Level Approval',
                                             help="If checked then multi-level approval is necessary")
-    validation_type = fields.Selection(selection_add=[('multi', 'Direct Manager and HR')])
+    validation_type = fields.Selection(selection_add=[('multi', 'Multi Approvals')])
     leave_validators = fields.One2many('hr.holidays.validators',
                                        'hr_holiday_status',
                                        string='Leave Validators', help="Leave validators")
