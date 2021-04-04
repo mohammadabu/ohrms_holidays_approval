@@ -43,13 +43,13 @@ class CreateLeaveComment(models.TransientModel):
                     approval_access= True
             # if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
             #     break     
-        holiday_status_id = user.holiday_status_id.id
-        employee_id = user.employee_id.id
-        request_date_from = user.request_date_from
-        request_date_to = user.request_date_to
-        number_of_days = user.number_of_days  
-        all_emails = user.all_emails
-        res_id = user.id
+        holiday_status_id = leave_self.holiday_status_id.id
+        employee_id = leave_self.employee_id.id
+        request_date_from = leave_self.request_date_from
+        request_date_to = leave_self.request_date_to
+        number_of_days = leave_self.number_of_days  
+        all_emails = leave_self.all_emails
+        res_id = leave_self.id
         employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
         message += ('<h2>Dear %s<h2><br/>') % (employee.name)
         message += ('<h4>The leave request was refused by  %s<h4><br/>') % (employee.name)
