@@ -150,3 +150,95 @@ class CreateLeaveComment(models.TransientModel):
             return True
     def cancel_refuse_comment(self):
         return {'type': 'ir.actions.act_window_close'}        
+
+
+    def create_body_for_email(self,message,res_id):
+        body_html = ''
+        body_html +='<tr>'
+        body_html +=    '<td align="center" style="min-width: 590px;">'
+        body_html +=        '<table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">'
+        body_html +=            '<tr>'
+        body_html +=                '<td valign="top" style="font-size: 13px;">'
+        body_html +=                    '<p style="margin: 0px;font-size: 14px;">'
+        body_html +=                        message
+        body_html +=                    '</p>'
+        body_html +=                    '<p style="margin-top: 24px; margin-bottom: 16px;">'
+        body_html +=                        ('<a href="/mail/view?model=hr.leave&amp;res_id=%s" style="background-color:#875A7B; padding: 10px; text-decoration: none; color: #fff; border-radius: 5px;">') % (res_id)
+        body_html +=                            'View Leave'
+        body_html +=                        '</a>'
+        body_html +=                    '</p>'
+        body_html +=                    'Thanks,<br/>'
+        body_html +=                '</td>'
+        body_html +=            '</tr>'
+        body_html +=            '<tr>'
+        body_html +=                '<td style="text-align:center;">'
+        body_html +=                    '<hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>'
+        body_html +=                '</td>'
+        body_html +=            '</tr>'
+        body_html +=        '</table>'
+        body_html +=    '</td>'
+        body_html +='</tr>'
+        return body_html
+
+    def create_header_footer_for_email(self,holiday_status_id,employee_id,body_html):
+        hr_holidays = self.env['hr.leave.type'].sudo().search([('id','=',holiday_status_id)])
+        employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
+        leave_type = hr_holidays.name
+        company_id = employee.company_id.id
+        header = ''
+        header += '<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">'                      
+        header +=   '<tr>'
+        header +=       '<td align="center">' 
+        header +=           '<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">'
+        header +=               '<tbody>'
+
+        header +=                   '<tr>'
+        header +=                       '<td align="center" style="min-width: 590px;">'
+        header +=                           '<table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">'
+        header +=                               '<tr><td valign="middle">'
+        header +=                                   '<span style="font-size: 10px;">Leave Approval</span><br/>'
+        header +=                                   '<span style="font-size: 20px; font-weight: bold;">'
+        header +=                                       leave_type
+        header +=                                   '</span>'
+        header +=                               '</td><td valign="middle" align="right">'
+        header +=                                  ('<img src="/logo.png?company=%s" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt=""/>') % (str(company_id))
+        header +=                               '</td></tr>'
+        header +=                               '<tr><td colspan="2" style="text-align:center;">'
+        header +=                                   '<hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>'
+        header +=                               '</td></tr>'
+        header +=                           '</table>'
+        header +=                       '</td>'
+        header +=                   '</tr>'
+        header +=                   body_html
+        header +=                   '<tr>' 
+        header +=                       '<td align="center" style="min-width: 590px;">' 
+        header +=                           '<table border="0" cellpadding="0" cellspacing="0" width="622px" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 24px; border-collapse:separate;">'
+        header +=                               '<tr><td valign="middle" align="left">'
+        header +=                                   str(employee.company_id.name)
+        header +=                               '</td></tr>'
+        header +=                               '<tr><td valign="middle" align="left" style="opacity: 0.7;">'
+        header +=                                   str(employee.company_id.phone)                
+        if employee.company_id.email:
+            header += ('<a href="mailto:%s" style="text-decoration:none; color: #454748;">%s</a>') % (str(employee.company_id.email),str(employee.company_id.email))
+        if employee.company_id.website:
+            header += ('<a href="%s" style="text-decoration:none; color: #454748;">') % (str(employee.company_id.website))    
+        header +=                               '</td></tr>'
+        header +=                           '</table>'
+        header +=                       '</td>'
+        header +=                   '</tr>'
+
+        header +=               '</tbody>'
+        header +=           '</table>'
+        header +=       '</td>'
+        header +=     '</tr>'
+        header +=     '<tr>'
+        header +=       '<td align="center" style="min-width: 590px;">'
+        header +=           '<table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">'
+        header +=               '<tr><td style="text-align: center; font-size: 13px;">'
+        header +=                   "Powered by "+ ('<a target="_blank" href="%s" style="color: #875A7B;">%s</a>') % (str(employee.company_id.website),str(employee.company_id.name)) 
+        header +=               '</td></tr>'
+        header +=           '</table>'
+        header +=       '</td>'
+        header +=     '</tr>'
+        header +=   '</table>'
+        return header        
