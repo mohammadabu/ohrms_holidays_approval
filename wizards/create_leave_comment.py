@@ -140,7 +140,7 @@ class CreateLeaveComment(models.TransientModel):
             request_date_to = user.request_date_to
             number_of_days = user.number_of_days  
             res_id = user.id
-        # employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
+        employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
         message = ('<h4>Request approval to leave by %s<h4><br/>') % (employee.name)
         message += ('<p style="font-size: 12px;">From %s</p><br/>') % (request_date_from)
         message += ('<p style="font-size: 12px;">To %s</p><br/>') % (request_date_to)
