@@ -149,7 +149,7 @@ class CreateLeaveComment(models.TransientModel):
         if notApproved != "":
             message = ('<h4>Request approval to leave by %s<h4><br/>') % (employee.name)
         else:
-            message = ('<h4>The Request was officially accepted <h4><br/>') % (employee.name)    
+            message = '<h4>The Request was officially accepted <h4><br/>'  
         message += ('<p style="font-size: 12px;">From %s</p><br/>') % (request_date_from)
         message += ('<p style="font-size: 12px;">To %s</p><br/>') % (request_date_to)
         message += ('<p style="font-size: 12px;">Duration: %s</p><br/>') % (number_of_days)
