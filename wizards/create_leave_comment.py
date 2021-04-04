@@ -25,12 +25,11 @@ class CreateLeaveComment(models.TransientModel):
             if user_obj.validation_status != True:
                 if user_obj.validators_type == 'direct_manager' and user.employee_id.parent_id.id != False:
                     if user.employee_id.parent_id.user_id.id != False:
-                        # if all_emails != False:
-                        #     if str(user.employee_id.parent_id.user_id.login) not in all_emails:
-                        #         all_emails = all_emails + "," +str(user.employee_id.parent_id.user_id.login)
-                        # else:
-                        #     all_emails = str(user.employee_id.parent_id.user_id.login)
-
+                        if all_emails != "":
+                            if str(user.employee_id.parent_id.user_id.login) not in all_emails:
+                                all_emails = all_emails + "," +str(user.employee_id.parent_id.user_id.login)
+                        else:
+                            all_emails = str(user.employee_id.parent_id.user_id.login)
                         if user.employee_id.parent_id.user_id.id == current_uid:
                             validation_obj = user.leave_approvals.search(
                                     [('id', '=', user_obj.id)])
