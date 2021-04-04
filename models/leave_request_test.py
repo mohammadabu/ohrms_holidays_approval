@@ -116,7 +116,7 @@ class HrLeave(models.Model):
     is_approved_user_id = fields.Boolean(default=False, compute='_check_is_approved_user_id')  
     all_emails = fields.Text()
     approved_emails = fields.Text()
-
+    notApproved_emails = fields.Text()
     def _check_is_approved_user_id(self):
         current_uid = self.env.uid
         self.is_approved_user_id= False

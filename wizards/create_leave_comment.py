@@ -24,6 +24,7 @@ class CreateLeaveComment(models.TransientModel):
         approved = ""
         notApproved = ""
         for user_obj in user.leave_approvals:
+            clicked = 0
             # if user_obj.validation_status != True:
             if user_obj.validators_type == 'direct_manager' and user.employee_id.parent_id.id != False:
                 if user_obj.validation_status == True:
@@ -45,11 +46,19 @@ class CreateLeaveComment(models.TransientModel):
                         validation_obj.validation_status = True
                         validation_obj.validation_refused = False
                         validation_obj.leave_comments = comment
+                        clicked = 1
                         if approved != "":
                             if str("Direct Manager") not in approved:
                                 approved = approved + "," + str("Direct Manager")
                         else:
                             approved = str("Direct Manager")
+
+                if  clicked != 1 and user_obj.validation_status != True:
+                    if notApproved != "":
+                        if str("Direct Manager") not in notApproved:
+                            notApproved = notApproved + "," + str("Direct Manager")
+                    else:
+                        notApproved = str("Direct Manager")         
             if  user_obj.validators_type == 'position':
                 employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',user_obj.holiday_validators_position.id),('user_id','=',current_uid)])
                 employee_email = self.env['hr.employee'].sudo().search([('multi_job_id','in',user_obj.holiday_validators_position.id)])
@@ -76,12 +85,30 @@ class CreateLeaveComment(models.TransientModel):
                             approved = approved + "," + str(user_obj.holiday_validators_position.name)
                     else:
                         approved = str(user_obj.holiday_validators_position.name)
+                if  clicked != 1 and user_obj.validation_status != True:
+                    if notApproved != "":
+                        if str(user_obj.holiday_validators_position.name) not in notApproved:
+                            notApproved = notApproved + "," + str(user_obj.holiday_validators_position.name)
+                    else:
+                        notApproved = str(user_obj.holiday_validators_position.name)            
             if  user_obj.validators_type == 'user':
+                if user_obj.validation_status == True:
+                    if approved != "":
+                        if str(user_obj.holiday_validators_user.name) not in approved:
+                            approved = approved + "," + str(user_obj.holiday_validators_user.name)
+                    else:
+                        approved = str(user_obj.holiday_validators_user.name)
                 if all_emails != "":
                     if str(user_obj.holiday_validators_user.login) not in all_emails:
                         all_emails = all_emails + "," +str(user_obj.holiday_validators_user.login)
                 else:
                     all_emails = str(user_obj.holiday_validators_user.login)
+                if  clicked != 1 and user_obj.validation_status != True:
+                    if notApproved != "":
+                        if str(user_obj.holiday_validators_user.name) not in notApproved:
+                            notApproved = notApproved + "," + str(user_obj.holiday_validators_user.name)
+                    else:
+                        notApproved = str(user_obj.holiday_validators_user.name)    
                 if user_obj.holiday_validators_user.id == current_uid:
                     validation_obj = user.leave_approvals.search(
                                 [('id', '=', user_obj.id)])
@@ -92,6 +119,7 @@ class CreateLeaveComment(models.TransientModel):
                 break 
             user.all_emails = all_emails        
             user.approved_emails = approved
+            user.notApproved = notApproved
 
         approval_flag = True
         for user_obj in user.leave_approvals:
