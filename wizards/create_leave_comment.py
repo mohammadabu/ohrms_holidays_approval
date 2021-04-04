@@ -117,8 +117,8 @@ class CreateLeaveComment(models.TransientModel):
                             notApproved = notApproved + "," + str(user_obj.holiday_validators_user.name)
                     else:
                         notApproved = str(user_obj.holiday_validators_user.name)        
-            # if not(user_obj.approval != True or (user_obj.approval == True and user_obj.validation_status == True)): 
-            #     break 
+            if not(user_obj.approval != True or (user_obj.approval == True and user_obj.validation_status == True)): 
+                break 
             user.all_emails = all_emails        
             user.approved_emails = approved
             user.notApproved_emails = notApproved
