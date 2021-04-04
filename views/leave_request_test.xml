@@ -47,11 +47,11 @@
         <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//group[last()]" position="after">
-                <field name="all_emails"/>
-                <field name="approved_emails" />
-                <field name="notApproved_emails" />
-                <field name="is_approved_user_id" />
-                <field name="is_refused_user_id" />
+                <field name="all_emails" invisible="1"/>
+                <field name="approved_emails" invisible="1" />
+                <field name="notApproved_emails" invisible="1" />
+                <field name="is_approved_user_id" invisible="1"/>
+                <field name="is_refused_user_id" invisible="1"/>
                 <field name="multi_level_validation" invisible="1"/>
                 <notebook attrs="{'invisible': [('multi_level_validation', '=', False)]}">
                     <page string="Validation Status">
