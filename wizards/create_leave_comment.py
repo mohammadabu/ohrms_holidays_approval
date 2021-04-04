@@ -115,8 +115,8 @@ class CreateLeaveComment(models.TransientModel):
                     validation_obj.validation_status = True
                     validation_obj.validation_refused = False
                     validation_obj.leave_comments = comment
-            if not(user_obj.approval != True or (user_obj.approval == True and user_obj.validation_status == True)): 
-                break 
+            # if not(user_obj.approval != True or (user_obj.approval == True and user_obj.validation_status == True)): 
+            #     break 
             user.all_emails = all_emails        
             user.approved_emails = approved
             user.notApproved = notApproved
