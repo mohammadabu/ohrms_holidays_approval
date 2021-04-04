@@ -25,11 +25,11 @@ class CreateLeaveComment(models.TransientModel):
             if user_obj.validation_status != True:
                 if user_obj.validators_type == 'direct_manager' and user.employee_id.parent_id.id != False:
                     if user.employee_id.parent_id.user_id.id != False:
-                        if all_emails != False:
-                            if str(user.employee_id.parent_id.user_id.login) not in all_emails:
-                                all_emails = all_emails + "," +str(user.employee_id.parent_id.user_id.login)
-                        else:
-                            all_emails = str(user.employee_id.parent_id.user_id.login)
+                        # if all_emails != False:
+                        #     if str(user.employee_id.parent_id.user_id.login) not in all_emails:
+                        #         all_emails = all_emails + "," +str(user.employee_id.parent_id.user_id.login)
+                        # else:
+                        #     all_emails = str(user.employee_id.parent_id.user_id.login)
 
                         if user.employee_id.parent_id.user_id.id == current_uid:
                             validation_obj = user.leave_approvals.search(
@@ -40,11 +40,11 @@ class CreateLeaveComment(models.TransientModel):
                 if  user_obj.validators_type == 'position':
                     employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',user_obj.holiday_validators_position.id),('user_id','=',current_uid)])
                     for emp in employee:
-                        if all_emails != False:
-                            if str(emp.user_id.id) not in all_emails:
-                                all_emails = all_emails + "," +str(emp.user_id.id)
-                        else:
-                            all_emails = str(emp.user_id.id)
+                        # if all_emails != False:
+                        #     if str(emp.user_id.login) not in all_emails:
+                        #         all_emails = all_emails + "," +str(emp.user_id.login)
+                        # else:
+                        #     all_emails = str(emp.user_id.login)
                     if len(employee) > 0:
                         validation_obj = user.leave_approvals.search(
                                     [('id', '=', user_obj.id)])
@@ -52,11 +52,11 @@ class CreateLeaveComment(models.TransientModel):
                         validation_obj.validation_refused = False
                         validation_obj.leave_comments = comment
                 if  user_obj.validators_type == 'user':
-                    if all_emails != "":
-                        if str(user_obj.holiday_validators_user.login) not in all_emails:
-                            all_emails = all_emails + "," +str(user_obj.holiday_validators_user.login)
-                    else:
-                        all_emails = str(user_obj.holiday_validators_user.login)
+                    # if all_emails != "":
+                    #     if str(user_obj.holiday_validators_user.login) not in all_emails:
+                    #         all_emails = all_emails + "," +str(user_obj.holiday_validators_user.login)
+                    # else:
+                    #     all_emails = str(user_obj.holiday_validators_user.login)
                     if user_obj.holiday_validators_user.id == current_uid:
                         validation_obj = user.leave_approvals.search(
                                     [('id', '=', user_obj.id)])
