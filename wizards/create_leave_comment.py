@@ -29,6 +29,7 @@ class CreateLeaveComment(models.TransientModel):
         request_date_to = ""
         number_of_days = ""
         res_id = ""
+        message = ""
         for user_obj in user.leave_approvals:
             clicked = 0
             # if user_obj.validation_status != True:
@@ -145,11 +146,11 @@ class CreateLeaveComment(models.TransientModel):
             res_id = user.id
         employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
         if not notApproved != "":
-            message = ('<h2>Dear %s<h2><br/>') % (employee.name)
+            message += ('<h2>Dear %s<h2><br/>') % (employee.name)
         if notApproved != "":
-            message = ('<h4>Request approval to leave by %s<h4><br/>') % (employee.name)
+            message += ('<h4>Request approval to leave by %s<h4><br/>') % (employee.name)
         else:
-            message = '<h4>The Request was officially accepted <h4><br/>'  
+            message += '<h4>The Request was officially accepted <h4><br/>'  
         message += ('<p style="font-size: 12px;">From %s</p><br/>') % (request_date_from)
         message += ('<p style="font-size: 12px;">To %s</p><br/>') % (request_date_to)
         message += ('<p style="font-size: 12px;">Duration: %s</p><br/>') % (number_of_days)
