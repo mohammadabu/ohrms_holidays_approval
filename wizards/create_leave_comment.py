@@ -18,7 +18,7 @@ class CreateLeaveComment(models.TransientModel):
         else:
             active_id = self.id
             
-        user = self.env['hr.leave'].search([('id', '=', active_id)], limit=1)
+        user = self.env['hr.leave'].sudo().search([('id', '=', active_id)], limit=1)
         comment =  self.env['create.leave.comment'].sudo().search([('id', '=', new.id)], limit=1).comment 
         all_emails = ""
         approved = ""
