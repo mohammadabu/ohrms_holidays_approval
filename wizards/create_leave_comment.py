@@ -55,10 +55,10 @@ class CreateLeaveComment(models.TransientModel):
                 employee_email = self.env['hr.employee'].sudo().search([('multi_job_id','in',user_obj.holiday_validators_position.id)])
                 if user_obj.validation_status == True:
                     if approved != "":
-                        if str(holiday_validators_position.name) not in approved:
-                            approved = approved + "," + str(holiday_validators_position.name)
+                        if str(user_obj.holiday_validators_position.name) not in approved:
+                            approved = approved + "," + str(user_obj.holiday_validators_position.name)
                     else:
-                        approved = str(holiday_validators_position.name)
+                        approved = str(user_obj.holiday_validators_position.name)
                 for emp in employee_email:
                     if all_emails != False:
                         if str(emp.user_id.login) not in all_emails:
@@ -72,10 +72,10 @@ class CreateLeaveComment(models.TransientModel):
                     validation_obj.validation_refused = False
                     validation_obj.leave_comments = comment
                     if approved != "":
-                        if str(holiday_validators_position.name) not in approved:
-                            approved = approved + "," + str(holiday_validators_position.name)
+                        if str(user_obj.holiday_validators_position.name) not in approved:
+                            approved = approved + "," + str(user_obj.holiday_validators_position.name)
                     else:
-                        approved = str(holiday_validators_position.name)
+                        approved = str(user_obj.holiday_validators_position.name)
             if  user_obj.validators_type == 'user':
                 if all_emails != "":
                     if str(user_obj.holiday_validators_user.login) not in all_emails:
