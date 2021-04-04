@@ -134,7 +134,7 @@ class CreateLeaveComment(models.TransientModel):
             user.notApproved_emails = notApproved
 
             holiday_status_id = user.holiday_status_id
-            employee_id = user.employee_id
+            employee_id = user.employee_id.id
             request_date_from = user.request_date_from
             request_date_to = user.request_date_to
             number_of_days = user.number_of_days  
