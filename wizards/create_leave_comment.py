@@ -34,10 +34,10 @@ class CreateLeaveComment(models.TransientModel):
             # if user_obj.validation_status != True:
             if user_obj.validators_type == 'direct_manager' and user.employee_id.parent_id.id != False:
                 if user_obj.validation_status == True:
-                    str_pos = "The <bold>Direct Manager</bold>approved your time off request<br>" 
+                    str_pos = "The <b>Direct Manager</b> approved your time off request<br>" 
                     if approved != "":
                         if str(str_pos) not in approved:
-                            approved = approved + "," + str(str_pos)
+                            approved = approved + "" + str(str_pos)
                     else:
                         approved = str(str_pos)
 
@@ -54,10 +54,10 @@ class CreateLeaveComment(models.TransientModel):
                         validation_obj.validation_refused = False
                         validation_obj.leave_comments = comment
                         clicked = 1
-                        str_pos = "The <bold>Direct Manager</bold>approved your time off request<br>" 
+                        str_pos = "The <b>Direct Manager</b> approved your time off request<br>" 
                         if approved != "":
                             if str(str_pos) not in approved:
-                                approved = approved + "," + str(str_pos)
+                                approved = approved + "" + str(str_pos)
                         else:
                             approved = str(str_pos)
 
@@ -71,10 +71,10 @@ class CreateLeaveComment(models.TransientModel):
                 employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',user_obj.holiday_validators_position.id),('user_id','=',current_uid)])
                 employee_email = self.env['hr.employee'].sudo().search([('multi_job_id','in',user_obj.holiday_validators_position.id)])
                 if user_obj.validation_status == True:
-                    str_pos = "The position <bold>"+user_obj.holiday_validators_position.name+"</bold>approved your time off request<br>"
+                    str_pos = "The position <b>"+user_obj.holiday_validators_position.name+"</b> approved your time off request<br>"
                     if approved != "": 
                         if str(str_pos) not in approved:
-                            approved = approved + "," + str(str_pos)
+                            approved = approved + "" + str(str_pos)
                     else:
                         approved = str(str_pos)
                 for emp in employee_email:
@@ -90,10 +90,10 @@ class CreateLeaveComment(models.TransientModel):
                     validation_obj.validation_refused = False
                     validation_obj.leave_comments = comment
                     clicked = 1
-                    str_pos = "The position <bold>"+user_obj.holiday_validators_position.name+"</bold>approved your time off request<br>"
+                    str_pos = "The position <b>"+user_obj.holiday_validators_position.name+"</b> approved your time off request<br>"
                     if approved != "":
                         if str(str_pos) not in approved:
-                            approved = approved + "," + str(str_pos)
+                            approved = approved + "" + str(str_pos)
                     else:
                         approved = str(str_pos)
                 if  clicked != 1 and user_obj.validation_status != True:
@@ -104,10 +104,10 @@ class CreateLeaveComment(models.TransientModel):
                         notApproved = str(user_obj.holiday_validators_position.name)            
             if  user_obj.validators_type == 'user':
                 if user_obj.validation_status == True:
-                    str_pos = "<bold>"+user_obj.holiday_validators_user.name+"</bold>approved to your time off request<br>"
+                    str_pos = "<b>"+user_obj.holiday_validators_user.name+"</b> approved to your time off request<br>"
                     if approved != "":
                         if str(str_pos) not in approved:
-                            approved = approved + "," + str(str_pos)
+                            approved = approved + "" + str(str_pos)
                     else:
                         approved = str(str_pos)
                 if all_emails != "":
