@@ -41,10 +41,10 @@ class CreateLeaveComment(models.TransientModel):
                     employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',user_obj.holiday_validators_position.id),('user_id','=',current_uid)])
                     for emp in employee:
                         if all_emails != False:
-                            if str(emp.user_id.login) not in all_emails:
-                                all_emails = all_emails + "," +str(emp.user_id.login)
+                            if str(emp.user_id.id) not in all_emails:
+                                all_emails = all_emails + "," +str(emp.user_id.id)
                         else:
-                            all_emails = str(emp.user_id.login)
+                            all_emails = str(emp.user_id.id)
                     if len(employee) > 0:
                         validation_obj = user.leave_approvals.search(
                                     [('id', '=', user_obj.id)])
