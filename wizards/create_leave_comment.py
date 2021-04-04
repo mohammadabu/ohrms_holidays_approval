@@ -121,7 +121,7 @@ class CreateLeaveComment(models.TransientModel):
             #     break 
             user.all_emails = all_emails        
             user.approved_emails = approved
-            user.notApproved = notApproved
+            user.notApproved_emails = notApproved
 
         approval_flag = True
         for user_obj in user.leave_approvals:
