@@ -145,7 +145,7 @@ class CreateLeaveComment(models.TransientModel):
         message += ('<p style="font-size: 12px;">From %s</p><br/>') % (request_date_from)
         message += ('<p style="font-size: 12px;">To %s</p><br/>') % (request_date_to)
         message += ('<p style="font-size: 12px;">Duration: %s</p><br/>') % (number_of_days)
-        message = ('%s') % (approved)
+        message += ('%s') % (approved)
         body_html = self.create_body_for_email(message,res_id)
         email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)           
         value = {
