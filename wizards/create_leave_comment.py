@@ -80,6 +80,7 @@ class CreateLeaveComment(models.TransientModel):
                     validation_obj.validation_status = True
                     validation_obj.validation_refused = False
                     validation_obj.leave_comments = comment
+                    clicked = 1
                     if approved != "":
                         if str(user_obj.holiday_validators_position.name) not in approved:
                             approved = approved + "," + str(user_obj.holiday_validators_position.name)
@@ -103,18 +104,19 @@ class CreateLeaveComment(models.TransientModel):
                         all_emails = all_emails + "," +str(user_obj.holiday_validators_user.login)
                 else:
                     all_emails = str(user_obj.holiday_validators_user.login)
-                if  clicked != 1 and user_obj.validation_status != True:
-                    if notApproved != "":
-                        if str(user_obj.holiday_validators_user.name) not in notApproved:
-                            notApproved = notApproved + "," + str(user_obj.holiday_validators_user.name)
-                    else:
-                        notApproved = str(user_obj.holiday_validators_user.name)    
                 if user_obj.holiday_validators_user.id == current_uid:
                     validation_obj = user.leave_approvals.search(
                                 [('id', '=', user_obj.id)])
                     validation_obj.validation_status = True
                     validation_obj.validation_refused = False
                     validation_obj.leave_comments = comment
+                    clicked = 1
+                if  clicked != 1 and user_obj.validation_status != True:
+                    if notApproved != "":
+                        if str(user_obj.holiday_validators_user.name) not in notApproved:
+                            notApproved = notApproved + "," + str(user_obj.holiday_validators_user.name)
+                    else:
+                        notApproved = str(user_obj.holiday_validators_user.name)        
             # if not(user_obj.approval != True or (user_obj.approval == True and user_obj.validation_status == True)): 
             #     break 
             user.all_emails = all_emails        
