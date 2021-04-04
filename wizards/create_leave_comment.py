@@ -62,11 +62,12 @@ class CreateLeaveComment(models.TransientModel):
                             approved = str(str_pos)
 
                 if  clicked != 1 and user_obj.validation_status != True:
+                    str_pos = "- Direct Manager<br>"
                     if notApproved != "":
-                        if str("Direct Manager") not in notApproved:
-                            notApproved = notApproved + "," + str("Direct Manager")
+                        if str(str_pos) not in notApproved:
+                            notApproved = notApproved + "" + str(str_pos)
                     else:
-                        notApproved = str("Direct Manager")         
+                        notApproved = str(str_pos)         
             if  user_obj.validators_type == 'position':
                 employee = self.env['hr.employee'].sudo().search([('multi_job_id','in',user_obj.holiday_validators_position.id),('user_id','=',current_uid)])
                 employee_email = self.env['hr.employee'].sudo().search([('multi_job_id','in',user_obj.holiday_validators_position.id)])
@@ -97,11 +98,12 @@ class CreateLeaveComment(models.TransientModel):
                     else:
                         approved = str(str_pos)
                 if  clicked != 1 and user_obj.validation_status != True:
+                    str_pos = "- "+user_obj.holiday_validators_position.name+"<br>"
                     if notApproved != "":
-                        if str(user_obj.holiday_validators_position.name) not in notApproved:
-                            notApproved = notApproved + "," + str(user_obj.holiday_validators_position.name)
+                        if str(str_pos) not in notApproved:
+                            notApproved = notApproved + "" + str(str_pos)
                     else:
-                        notApproved = str(user_obj.holiday_validators_position.name)            
+                        notApproved = str(str_pos)            
             if  user_obj.validators_type == 'user':
                 if user_obj.validation_status == True:
                     str_pos = "<b>"+user_obj.holiday_validators_user.name+"</b> approved to your time off request<br>"
@@ -123,11 +125,12 @@ class CreateLeaveComment(models.TransientModel):
                     validation_obj.leave_comments = comment
                     clicked = 1
                 if  clicked != 1 and user_obj.validation_status != True:
+                    str_pos = "- "+user_obj.holiday_validators_user.name+"<br>"
                     if notApproved != "":
-                        if str(user_obj.holiday_validators_user.name) not in notApproved:
-                            notApproved = notApproved + "," + str(user_obj.holiday_validators_user.name)
+                        if str(str_pos) not in notApproved:
+                            notApproved = notApproved + "," + str(str_pos)
                     else:
-                        notApproved = str(user_obj.holiday_validators_user.name)        
+                        notApproved = str(str_pos)        
             # if not(user_obj.approval != True or (user_obj.approval == True and user_obj.validation_status == True)): 
             #     break 
             user.all_emails = all_emails        
@@ -146,6 +149,8 @@ class CreateLeaveComment(models.TransientModel):
         message += ('<p style="font-size: 12px;">To %s</p><br/>') % (request_date_to)
         message += ('<p style="font-size: 12px;">Duration: %s</p><br/>') % (number_of_days)
         message += ('%s') % (approved)
+        message += '<h4>Waiting for approval of the request : </h4>'
+        message += ('%s') % (notApproved)
         body_html = self.create_body_for_email(message,res_id)
         email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)           
         value = {
