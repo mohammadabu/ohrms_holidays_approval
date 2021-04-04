@@ -22,6 +22,7 @@ class CreateLeaveComment(models.TransientModel):
         current_user_name = self.env['res.users'].sudo().search([('id', '=', current_uid)]).name
         leave_self = self.env['hr.leave'].sudo().search([('id', '=', active_id)], limit=1)
         comment =  self.env['create.refuse.comment'].sudo().search([('id', '=', new.id)], limit=1).comment
+
         message = ""
         
         for l2 in leave_self.leave_approvals: 
@@ -50,7 +51,7 @@ class CreateLeaveComment(models.TransientModel):
         number_of_days = leave_self.number_of_days  
         all_emails = leave_self.all_emails
         res_id = leave_self.id
-
+        employee_login = self.env['hr.employee'].sudo().search([('id','=',employee_id)]).user_id.login
         employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
         message += ('<h2>Dear %s<h2><br/>') % (employee.name)
         message += ('<h4>The leave request was refused by  %s<h4><br/>') % (current_user_name)
@@ -62,7 +63,7 @@ class CreateLeaveComment(models.TransientModel):
         value = {
             'subject': 'Refused leave',
             'body_html': email_html,
-            'email_to': all_emails,
+            'email_to': all_emails + "," + employee_login,
             'email_cc': '',
             'auto_delete': False,
             'email_from': 'axs-sa.com',
