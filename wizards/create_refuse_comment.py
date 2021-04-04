@@ -11,7 +11,7 @@ class CreateLeaveComment(models.TransientModel):
         new = view_id.sudo().create({
             'comment' :self.comment
         })
-        current_employee = self.env['hr.employee'].search(
+        current_employee = self.env['hr.employee'].sudo().search(
                 [('user_id', '=', self.env.uid)], limit=1)
         approval_access = False
         current_uid = self.env.uid
@@ -22,7 +22,7 @@ class CreateLeaveComment(models.TransientModel):
         
         leave_self = self.env['hr.leave'].sudo().search([('id', '=', active_id)], limit=1)
         comment =  self.env['create.refuse.comment'].sudo().search([('id', '=', new.id)], limit=1).comment
-        
+        message = ""
         
         for l2 in leave_self.leave_approvals: 
             # direct manager
@@ -43,6 +43,30 @@ class CreateLeaveComment(models.TransientModel):
                     approval_access= True
             # if not(l2.approval != True or (l2.approval == True and l2.validation_status == True)): 
             #     break     
+        holiday_status_id = user.holiday_status_id.id
+        employee_id = user.employee_id.id
+        request_date_from = user.request_date_from
+        request_date_to = user.request_date_to
+        number_of_days = user.number_of_days  
+        all_emails = user.all_emails
+        res_id = user.id
+        employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
+        message += ('<h2>Dear %s<h2><br/>') % (employee.name)
+        message += ('<h4>The leave request was refused by  %s<h4><br/>') % (employee.name)
+        message += ('<p style="font-size: 12px;">From %s</p><br/>') % (request_date_from)
+        message += ('<p style="font-size: 12px;">To %s</p><br/>') % (request_date_to)
+        message += ('<p style="font-size: 12px;">Duration: %s</p><br/>') % (number_of_days)    
+        body_html = self.create_body_for_email(message,res_id)
+        email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)     
+        subject = "Refused leave"      
+        value = {
+            'subject': 'Approval of the time off request',
+            'body_html': email_html,
+            'email_to': all_emails,
+            'email_cc': '',
+            'auto_delete': False,
+            'email_from': 'axs-sa.com',
+        }
         if approval_access:
             for holiday in leave_self:
                 if holiday.state not in ['confirm', 'validate', 'validate1']:
@@ -91,6 +115,16 @@ class CreateLeaveComment(models.TransientModel):
                         validation_obj.validation_status = False
                         validation_obj.validation_refused = True
                         validation_obj.leave_comments = comment
+
+
+
+
+
+
+
+
+            mail_id = self.env['mail.mail'].sudo().create(value)
+            mail_id.sudo().send()
             return True
         else:
             for holiday in leave_self:
@@ -111,6 +145,8 @@ class CreateLeaveComment(models.TransientModel):
                 holiday.linked_request_ids.action_refuse()
             leave_self._remove_resource_leave()
             leave_self.activity_update()
+            mail_id = self.env['mail.mail'].sudo().create(value)
+            mail_id.sudo().send()
             return True
     def cancel_refuse_comment(self):
         return {'type': 'ir.actions.act_window_close'}        
