@@ -144,15 +144,24 @@ class CreateLeaveComment(models.TransientModel):
             number_of_days = user.number_of_days  
             res_id = user.id
         employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
-        message = ('<h4>Request approval to leave by %s<h4><br/>') % (employee.name)
+        if notApproved == "":
+            message = ('<h2>Dear %s<h2><br/>') % (employee.name)
+        if notApproved != "":
+            message = ('<h4>Request approval to leave by %s<h4><br/>') % (employee.name)
+        else:
+            message = ('<h4>The Request was officially accepted <h4><br/>') % (employee.name)    
         message += ('<p style="font-size: 12px;">From %s</p><br/>') % (request_date_from)
         message += ('<p style="font-size: 12px;">To %s</p><br/>') % (request_date_to)
         message += ('<p style="font-size: 12px;">Duration: %s</p><br/>') % (number_of_days)
-        message += ('%s') % (approved)
-        message += '<br><h4>Waiting for approval of the request : </h4>'
-        message += ('%s') % (notApproved)
+        if notApproved != "":
+            message += ('%s') % (approved)
+            message += '<br><h4>Waiting for approval of the request : </h4>'
+            message += ('%s') % (notApproved)      
         body_html = self.create_body_for_email(message,res_id)
-        email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)           
+        email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)     
+        subject = "Approval of the time off request"      
+        if notApproved == "":
+            subject = "The request for leave has been accepted"
         value = {
             'subject': 'Approval of the time off request',
             'body_html': email_html,
