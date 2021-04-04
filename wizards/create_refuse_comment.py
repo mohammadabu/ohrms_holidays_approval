@@ -19,7 +19,7 @@ class CreateLeaveComment(models.TransientModel):
             active_id = self.env.context.get('active_id')
         else:
             active_id = self.id
-        
+        current_user_name = self.env['res.users'].sudo().search([('id', '=', current_uid)]).name
         leave_self = self.env['hr.leave'].sudo().search([('id', '=', active_id)], limit=1)
         comment =  self.env['create.refuse.comment'].sudo().search([('id', '=', new.id)], limit=1).comment
         message = ""
@@ -50,17 +50,17 @@ class CreateLeaveComment(models.TransientModel):
         number_of_days = leave_self.number_of_days  
         all_emails = leave_self.all_emails
         res_id = leave_self.id
+
         employee = self.env['hr.employee'].sudo().search([('id','=',employee_id)])
         message += ('<h2>Dear %s<h2><br/>') % (employee.name)
-        message += ('<h4>The leave request was refused by  %s<h4><br/>') % (employee.name)
+        message += ('<h4>The leave request was refused by  %s<h4><br/>') % (current_user_name)
         message += ('<p style="font-size: 12px;">From %s</p><br/>') % (request_date_from)
         message += ('<p style="font-size: 12px;">To %s</p><br/>') % (request_date_to)
         message += ('<p style="font-size: 12px;">Duration: %s</p><br/>') % (number_of_days)    
         body_html = self.create_body_for_email(message,res_id)
-        email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)     
-        subject = "Refused leave"      
+        email_html = self.create_header_footer_for_email(holiday_status_id,employee_id,body_html)       
         value = {
-            'subject': 'Approval of the time off request',
+            'subject': 'Refused leave',
             'body_html': email_html,
             'email_to': all_emails,
             'email_cc': '',

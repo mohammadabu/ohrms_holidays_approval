@@ -169,7 +169,7 @@ class CreateLeaveComment(models.TransientModel):
             'email_to': all_emails,
             'email_cc': '',
             'auto_delete': False,
-            'email_from': 'odoo@odoo.com',
+            'email_from': 'axs-sa.com',
         }
         mail_id = self.env['mail.mail'].sudo().create(value)
         mail_id.sudo().send()
