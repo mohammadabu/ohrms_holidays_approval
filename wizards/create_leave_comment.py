@@ -47,6 +47,9 @@ class CreateLeaveComment(models.TransientModel):
                         validation_obj.leave_comments = comment
                 if not(user_obj.approval != True or (user_obj.approval == True and user_obj.validation_status == True)): 
                     break 
+            user.all_emails = 'testetetetetet'        
+
+
         approval_flag = True
         for user_obj in user.leave_approvals:
             if not user_obj.validation_status:

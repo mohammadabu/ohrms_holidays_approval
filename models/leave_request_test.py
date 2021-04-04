@@ -42,7 +42,9 @@ class HrLeaveTypes(models.Model):
         if self.validation_type == "multi":
             if len(self.leave_validators) < 1:
                 raise UserError(_("At Least Add One leave_validators"))
-        return rtn                                       
+        return rtn  
+
+
 class HrLeaveValidators(models.Model):
     """ Model for leave validators in Leave Types configuration """
     _name = 'hr.holidays.validators'
@@ -59,7 +61,10 @@ class HrLeaveValidators(models.Model):
                                          string='Leave Validators', help="Leave validators",
                                          domain="[('share','=',False)]")
     holiday_validators_position = fields.Many2one('hr.job')                                     
-    approval = fields.Boolean()                                   
+    approval = fields.Boolean()     
+
+
+
 class LeaveValidationStatus(models.Model):
     """ Model for leave validators and their status for each leave request """
     _name = 'leave.validation.status'
@@ -92,6 +97,10 @@ class LeaveValidationStatus(models.Model):
         raise UserError(_(
             "Changing leave validators is not permitted. You can only change "
             "it from Leave Types Configuration"))
+
+
+
+            
 class HrLeave(models.Model):
     _inherit = 'hr.leave'
 
